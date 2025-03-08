@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .menu-title {
+            width: 100%;
+            text-align: center;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .menu-column {
+            width: 48%;
+            margin-bottom: 30px;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            background-color: #ff9933;
+            color: #000;
+            text-align: center;
+            padding: 8px 15px;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.8rem;
+            position: relative;
+            margin-bottom: 15px;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section-title:before, .section-title:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            border-top: 19px solid transparent;
+            border-bottom: 19px solid transparent;
+        }
+        
+        .section-title:before {
+            left: -15px;
+            border-right: 15px solid #ff9933;
+        }
+        
+        .section-title:after {
+            right: -15px;
+            border-left: 15px solid #ff9933;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .item-name {
+            padding-right: 10px;
+        }
+        
+        .item-price {
+            color: #ff9933;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        .menu-images {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .menu-image {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .food-1 {
+            background-image: url('/api/placeholder/150/150');
+        }
+        
+        .food-2 {
+            background-image: url('/api/placeholder/150/150');
+        }
+        
+        .food-3 {
+            background-image: url('/api/placeholder/150/150');
+        }
+        
+        .food-4 {
+            background-image: url('/api/placeholder/150/150');
+        }
+        
+        .food-5 {
+            background-image: url('/api/placeholder/150/150');
+        }
+        
+        @media (max-width: 768px) {
+            .menu-column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-title">Menu List</div>
+        
+        <!-- Left Column -->
+        <div class="menu-column">
+            <div class="menu-section">
+                <div class="section-title">Milk Shake & Ice Cream</div>
+                <div class="menu-item"><span class="item-name">Vennila</span><span class="item-price">75</span></div>
+                <div class="menu-item"><span class="item-name">Strawberry</span><span class="item-price">75</span></div>
+                <div class="menu-item"><span class="item-name">Chocolate</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Butter Scotch</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Pista</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Spanish Delite</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Black Current</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Cherry</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Cashew</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Fig Fruit</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Kashmir</span><span class="item-price">85</span></div>
+                <div class="menu-item"><span class="item-name">Oman</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Saudi</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Thamam</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Mango Shake</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Papaya</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Pipeapple</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Chikku</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Aanar</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Tender Cocount</span><span class="item-price">80</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Falooda</div>
+                <div class="menu-item"><span class="item-name">Royal Falooda</span><span class="item-price">150</span></div>
+                <div class="menu-item"><span class="item-name">Pista Falooda</span><span class="item-price">160</span></div>
+                <div class="menu-item"><span class="item-name">Butter Falooda</span><span class="item-price">170</span></div>
+                <div class="menu-item"><span class="item-name">MGS Special Falooda</span><span class="item-price">210</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Fresh Limes</div>
+                <div class="menu-item"><span class="item-name">Fresh Limes</span><span class="item-price">20</span></div>
+                <div class="menu-item"><span class="item-name">Ginger Limes</span><span class="item-price">20</span></div>
+                <div class="menu-item"><span class="item-name">Mint Limes</span><span class="item-price">35</span></div>
+                <div class="menu-item"><span class="item-name">Soda Limes</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Grapes Limes</span><span class="item-price">30</span></div>
+                <div class="menu-item"><span class="item-name">Curry leaves Limes</span><span class="item-price">35</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Fruits Salad</div>
+                <div class="menu-item"><span class="item-name">Fruits Salad Pudding</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Dry Fruits Salad</span><span class="item-price">80</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Semam</div>
+                <div class="menu-item"><span class="item-name">Semam</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Badam Shake</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Oreo Shake</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Cara Milk Nuts</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Tirtak</span><span class="item-price">80</span></div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="menu-column">
+            <div class="menu-section">
+                <div class="section-title">Mutton</div>
+                <div class="menu-item"><span class="item-name">Mutton Chops</span><span class="item-price">190</span></div>
+                <div class="menu-item"><span class="item-name">Mutton Chukka</span><span class="item-price">130</span></div>
+                <div class="menu-item"><span class="item-name">Mutton Fry</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Mutton boti Fry</span><span class="item-price">80</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Fish</div>
+                <div class="menu-item"><span class="item-name">Fish Fry</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Fish Curry</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Fish 65</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Fish Masala</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Chilli Fish</span><span class="item-price">130</span></div>
+                <div class="menu-item"><span class="item-name">Prawns Fry</span><span class="item-price">170</span></div>
+                <div class="menu-item"><span class="item-name">Prawns Masala</span><span class="item-price">180</span></div>
+                <div class="menu-item"><span class="item-name">Prawns Curry</span><span class="item-price">180</span></div>
+                <div class="menu-item"><span class="item-name">Chilli Prawns</span><span class="item-price">180</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Dinner</div>
+                <div class="menu-item"><span class="item-name">Parotta</span><span class="item-price">15</span></div>
+                <div class="menu-item"><span class="item-name">Veechu Parotta</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Open Veechu Parotta</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Veechu Egg Parotta</span><span class="item-price">70</span></div>
+                <div class="menu-item"><span class="item-name">Piece Parotta</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Kothu Parotta</span><span class="item-price">70</span></div>
+                <div class="menu-item"><span class="item-name">Mutton Kaima Parotta</span><span class="item-price">180</span></div>
+                <div class="menu-item"><span class="item-name">Chicken Kaima Parotta</span><span class="item-price">170</span></div>
+                <div class="menu-item"><span class="item-name">Mutton Muttabak Parotta</span><span class="item-price">180</span></div>
+                <div class="menu-item"><span class="item-name">Chicken Muttabak Parotta</span><span class="item-price">170</span></div>
+                <div class="menu-item"><span class="item-name">Oil Parotta</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Without Oil Parotta</span><span class="item-price">20</span></div>
+                <div class="menu-item"><span class="item-name">Panchu Parotta</span><span class="item-price">25</span></div>
+                <div class="menu-item"><span class="item-name">Sweet Parotta</span><span class="item-price">30</span></div>
+                <div class="menu-item"><span class="item-name">Banana Leaf Mutton Parotta</span><span class="item-price">210</span></div>
+                <div class="menu-item"><span class="item-name">Banana Leaf Chicken Parotta</span><span class="item-price">170</span></div>
+                <div class="menu-item"><span class="item-name">Chappathi</span><span class="item-price">40</span></div>
+                <div class="menu-item"><span class="item-name">Chicken Dum Parotta</span><span class="item-price">300</span></div>
+                <div class="menu-item"><span class="item-name">Mushroom Dosa</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Chicken Dosa</span><span class="item-price">130</span></div>
+                <div class="menu-item"><span class="item-name">Mutton Dosa</span><span class="item-price">160</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Chinese</div>
+                <div class="menu-item"><span class="item-name">Veg Manchuriyan</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Gobi Manchuriyan</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Chilli Gobi Manchuriyan</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Mushroom Gravy</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Mushroom Manchurian</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Crispy Veg</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Szechwan Chicken</span><span class="item-price">150</span></div>
+                <div class="menu-item"><span class="item-name">Chilli Chicken</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Ginger Chicken</span><span class="item-price">140</span></div>
+                <div class="menu-item"><span class="item-name">Dragon Chicken</span><span class="item-price">150</span></div>
+                <div class="menu-item"><span class="item-name">Shawarma Roll</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Shawarma Plate</span><span class="item-price">110</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Fried Rice</div>
+                <div class="menu-item"><span class="item-name">Veg Fried Rice</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Egg Fried Rice</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Chicken Fried Rice</span><span class="item-price">120</span></div>
+                <div class="menu-item"><span class="item-name">Mushroom Fried Rice</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Panner Fried Rice</span><span class="item-price">110</span></div>
+                <div class="menu-item"><span class="item-name">Mixed Fried Rice</span><span class="item-price">140</span></div>
+                <div class="menu-item"><span class="item-name">Schezwan Chicken Fried Rice</span><span class="item-price">140</span></div>
+                <div class="menu-item"><span class="item-name">Schezwan Veg Fried Rice</span><span class="item-price">100</span></div>
+                <div class="menu-item"><span class="item-name">Taiwanese Chicken Fried Rice</span><span class="item-price">130</span></div>
+                <div class="menu-item"><span class="item-name">Taiwanese Veg Fried Rice</span><span class="item-price">110</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Noodles</div>
+                <div class="menu-item"><span class="item-name">Chicken Noodles</span><span class="item-price">110</span></div>
+                <div class="menu-item"><span class="item-name">Veg Noodles</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Egg Noodles</span><span class="item-price">90</span></div>
+                <div class="menu-item"><span class="item-name">Mixed Noodles</span><span class="item-price">130</span></div>
+                <div class="menu-item"><span class="item-name">Schezwan Chicken Noodles</span><span class="item-price">140</span></div>
+                <div class="menu-item"><span class="item-name">Schezwan Veg Noodles</span><span class="item-price">110</span></div>
+                <div class="menu-item"><span class="item-name">Taiwanese Chicken Noodles</span><span class="item-price">140</span></div>
+                <div class="menu-item"><span class="item-name">Taiwanese Veg Noodles</span><span class="item-price">100</span></div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="section-title">Idiyappam / Paya</div>
+                <div class="menu-item"><span class="item-name">Idiyappam / Paya</span><span class="item-price">80</span></div>
+                <div class="menu-item"><span class="item-name">Appam / Chicken Gravy</span><span class="item-price">135</span></div>
+            </div>
+        </div>
+        
+        <!-- Food Images -->
+        <div class="menu-images">
+            <div class="menu-image food-1">
+                <img src="https://images.pexels.com/photos/1108117/pexels-photo-1108117.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+            </div>
+            <div class="menu-image food-2">
+                <img src="https://images.pexels.com/photos/1482803/pexels-photo-1482803.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+            </div>
+            <div class="menu-image food-3">
+                <img src="https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+            </div>
+            <div class="menu-image food-4">
+                <img src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+            </div>
+            <div class="menu-image food-5">
+                <img src="https://images.pexels.com/photos/103566/pexels-photo-103566.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript can be used to add interactivity if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Menu loaded successfully');
+            
+            // Example: Add hover effect to menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('mouseover', function() {
+                    this.style.backgroundColor = 'rgba(255, 153, 51, 0.2)';
+                });
+                
+                item.addEventListener('mouseout', function() {
+                    this.style.backgroundColor = 'transparent';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
