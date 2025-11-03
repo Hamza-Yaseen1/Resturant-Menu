@@ -1,333 +1,1409 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Restaurant Menu</title>
+    <meta
+      name="description"
+      content="Modern, responsive, accessible restaurant menu with search, section toggles, and print-friendly layout."
+    />
     <style>
+        :root{
+      --bg:#111213;
+      --card:#1a1b1e;
+      --muted:#9aa1ac;
+      --text:#f7f8fa;
+      --brand:#ff9933;
+      --brand-weak: rgba(255,153,51,.12);
+      --ring: 0 0 0 .12rem rgba(255,153,51,.6);
+      --radius: 18px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --currency:'\20A8'; /* changed to Pakistani Rupee symbol */
+      --gap: 14px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      --script: "Brush Script MT", "Comic Sans MS", cursive;
+    }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 22px;
+        color: var(--text);
+        background: radial-gradient(
+          80% 80% at 100% 0%,
+          #1b1c1f 0%,
+          var(--bg) 60%
+        );
+        font-family: var(--font);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        letter-spacing: 0.1px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin-inline: auto;
+      }
+
+      .app-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+      .title {
+        font-family: var(--script);
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        letter-spacing: 0.5px;
+      }
+      .tools {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .search {
+        position: relative;
+      }
+      .search input {
+        width: min(360px, 86vw);
+        padding: 12px 40px 12px 14px;
+        border-radius: 999px;
+        border: 1px solid #2a2c31;
+        background: #0f1012;
+        color: var(--text);
+        outline: none;
+        box-shadow: none;
+        transition: border 0.2s, box-shadow 0.2s;
+      }
+      .search input:focus {
+        border-color: var(--brand);
+        box-shadow: var(--ring);
+      }
+      .clear-btn {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 10px;
+      }
+      .clear-btn:hover {
+        color: var(--text);
+      }
+
+      .grid {
+        display: grid;
+        gap: var(--gap);
+        grid-template-columns: 1fr; /* mobile */
+      }
+      @media (min-width: 820px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid #24262b;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .badge {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 18px;
+        border-radius: 999px;
+        font-family: var(--script);
+        font-size: 1.4rem;
+        letter-spacing: 0.3px;
+        color: #1b1b1b;
+        background: linear-gradient(90deg, var(--brand) 0%, #ffc27a 100%);
+      }
+
+      .section-actions {
+        display: flex;
+        gap: 6px;
+      }
+      .btn {
+        appearance: none;
+        border: 1px solid #2b2f36;
+        background: #0f1012;
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .btn:hover {
+        border-color: var(--brand);
+        background: var(--brand-weak);
+      }
+
+      .items {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      /* Item row with dotted leader to price */
+      .row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
+      }
+      .row:hover {
+        background: var(--brand-weak);
+      }
+
+      .name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+      .dots {
+        flex: 1;
+        border-bottom: 1px dotted #3a3e45;
+        opacity: 0.7;
+        margin-inline: 8px;
+      }
+
+      .price {
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        color: var(--brand);
+      }
+      .price::before {
+        content: var(--currency) "\00A0";
+      }
+
+      /* Food gallery */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .gallery figure {
+        margin: 0;
+        overflow: hidden;
+        border-radius: 14px;
+        border: 1px solid #25272d;
+        background: #0e0f11;
+      }
+      .gallery img {
+        display: block;
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        transition: transform 0.25s ease;
+      }
+      .gallery figure:hover img {
+        transform: scale(1.05);
+      }
+      .gallery figcaption {
+        font-size: 0.85rem;
+        color: var(--muted);
+        padding: 6px 8px;
+      }
+      @media (max-width: 760px) {
+        .gallery {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Pretty section separators on print too */
+      .separator {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #2b2f36 20%,
+          #2b2f36 80%,
+          transparent
+        );
+        margin: 12px 0;
+      }
+
+      /* Collapsible */
+      details {
+        background: #121316;
+        border-radius: 14px;
+        border: 1px solid #22242a;
+        padding: 10px 12px;
+      }
+      details[open] {
+        background: #13151a;
+      }
+      summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 6px;
+        border-radius: 10px;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary:focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+      }
+
+      /* Print styles */
+      @media print {
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #1a1a1a;
-            color: white;
-            margin: 0;
-            padding: 20px;
+          background: #fff;
+          color: #000;
+          padding: 0;
         }
-        
-        .menu-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+        .card {
+          box-shadow: none;
+          border: 0;
         }
-        
-        .menu-title {
-            width: 100%;
-            text-align: center;
-            font-family: 'Brush Script MT', cursive;
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+        .btn,
+        .tools,
+        .gallery {
+          display: none !important;
         }
-        
-        .menu-column {
-            width: 48%;
-            margin-bottom: 30px;
+        .title {
+          font-size: 2.2rem;
         }
-        
-        .menu-section {
-            margin-bottom: 30px;
+        .row {
+          padding: 4px 0;
         }
-        
-        .section-title {
-            background-color: #ff9933;
-            color: #000;
-            text-align: center;
-            padding: 8px 15px;
-            font-family: 'Brush Script MT', cursive;
-            font-size: 1.8rem;
-            position: relative;
-            margin-bottom: 15px;
-            width: 60%;
-            margin-left: auto;
-            margin-right: auto;
+        .price {
+          color: #000;
         }
-        
-        .section-title:before, .section-title:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            border-top: 19px solid transparent;
-            border-bottom: 19px solid transparent;
+        :root {
+          --currency: "";
         }
-        
-        .section-title:before {
-            left: -15px;
-            border-right: 15px solid #ff9933;
-        }
-        
-        .section-title:after {
-            right: -15px;
-            border-left: 15px solid #ff9933;
-        }
-        
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .item-name {
-            padding-right: 10px;
-        }
-        
-        .item-price {
-            color: #ff9933;
-            font-weight: bold;
-            min-width: 50px;
-            text-align: right;
-        }
-        
-        .menu-images {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .menu-image {
-            width: 150px;
-            height: 150px;
-            margin: 10px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        
-        .food-1 {
-            background-image: url('/api/placeholder/150/150');
-        }
-        
-        .food-2 {
-            background-image: url('/api/placeholder/150/150');
-        }
-        
-        .food-3 {
-            background-image: url('/api/placeholder/150/150');
-        }
-        
-        .food-4 {
-            background-image: url('/api/placeholder/150/150');
-        }
-        
-        .food-5 {
-            background-image: url('/api/placeholder/150/150');
-        }
-        
-        @media (max-width: 768px) {
-            .menu-column {
-                width: 100%;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="menu-container">
-        <div class="menu-title">Menu List</div>
-        
-        <!-- Left Column -->
-        <div class="menu-column">
-            <div class="menu-section">
-                <div class="section-title">Milk Shake & Ice Cream</div>
-                <div class="menu-item"><span class="item-name">Vennila</span><span class="item-price">75</span></div>
-                <div class="menu-item"><span class="item-name">Strawberry</span><span class="item-price">75</span></div>
-                <div class="menu-item"><span class="item-name">Chocolate</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Butter Scotch</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Pista</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Spanish Delite</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Black Current</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Cherry</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Cashew</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Fig Fruit</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Kashmir</span><span class="item-price">85</span></div>
-                <div class="menu-item"><span class="item-name">Oman</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Saudi</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Thamam</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Mango Shake</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Papaya</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Pipeapple</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Chikku</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Aanar</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Tender Cocount</span><span class="item-price">80</span></div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Falooda</div>
-                <div class="menu-item"><span class="item-name">Royal Falooda</span><span class="item-price">150</span></div>
-                <div class="menu-item"><span class="item-name">Pista Falooda</span><span class="item-price">160</span></div>
-                <div class="menu-item"><span class="item-name">Butter Falooda</span><span class="item-price">170</span></div>
-                <div class="menu-item"><span class="item-name">MGS Special Falooda</span><span class="item-price">210</span></div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Fresh Limes</div>
-                <div class="menu-item"><span class="item-name">Fresh Limes</span><span class="item-price">20</span></div>
-                <div class="menu-item"><span class="item-name">Ginger Limes</span><span class="item-price">20</span></div>
-                <div class="menu-item"><span class="item-name">Mint Limes</span><span class="item-price">35</span></div>
-                <div class="menu-item"><span class="item-name">Soda Limes</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Grapes Limes</span><span class="item-price">30</span></div>
-                <div class="menu-item"><span class="item-name">Curry leaves Limes</span><span class="item-price">35</span></div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Fruits Salad</div>
-                <div class="menu-item"><span class="item-name">Fruits Salad Pudding</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Dry Fruits Salad</span><span class="item-price">80</span></div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Semam</div>
-                <div class="menu-item"><span class="item-name">Semam</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Badam Shake</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Oreo Shake</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Cara Milk Nuts</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Tirtak</span><span class="item-price">80</span></div>
-            </div>
+  </head>
+  <body>
+    <div class="container" role="application" aria-label="Restaurant menu">
+      <header class="app-header">
+        <h1 class="title">Menu List</h1>
+        <div class="tools">
+          <label class="search" aria-label="Search dishes">
+            <input
+              id="search"
+              type="search"
+              placeholder="Search items (e.g., Parotta, Falooda)…"
+              autocomplete="off"
+            />
+            <button
+              class="clear-btn"
+              aria-label="Clear search"
+              title="Clear"
+              type="button"
+              id="clear"
+            >
+              ✕
+            </button>
+          </label>
+          <button
+            class="btn"
+            id="toggle-currency"
+            type="button"
+            title="Toggle currency symbol"
+          >
+            Toggle $
+          </button>
         </div>
-        
-        <!-- Right Column -->
-        <div class="menu-column">
-            <div class="menu-section">
-                <div class="section-title">Mutton</div>
-                <div class="menu-item"><span class="item-name">Mutton Chops</span><span class="item-price">190</span></div>
-                <div class="menu-item"><span class="item-name">Mutton Chukka</span><span class="item-price">130</span></div>
-                <div class="menu-item"><span class="item-name">Mutton Fry</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Mutton boti Fry</span><span class="item-price">80</span></div>
+      </header>
+
+      <main class="grid" id="menu" tabindex="-1">
+        <!-- LEFT COLUMN -->
+        <section class="card" aria-labelledby="milk-title">
+          <div class="section-head">
+            <span id="milk-title" class="badge">Milkshake & Ice Cream</span>
+            <div class="section-actions">
+              <button
+                class="btn sort"
+                data-target="milk"
+                data-order="asc"
+                type="button"
+              >
+                Sort ↑ Price
+              </button>
+              <button
+                class="btn sort"
+                data-target="milk"
+                data-order="desc"
+                type="button"
+              >
+                Sort ↓ Price
+              </button>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Fish</div>
-                <div class="menu-item"><span class="item-name">Fish Fry</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Fish Curry</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Fish 65</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Fish Masala</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Chilli Fish</span><span class="item-price">130</span></div>
-                <div class="menu-item"><span class="item-name">Prawns Fry</span><span class="item-price">170</span></div>
-                <div class="menu-item"><span class="item-name">Prawns Masala</span><span class="item-price">180</span></div>
-                <div class="menu-item"><span class="item-name">Prawns Curry</span><span class="item-price">180</span></div>
-                <div class="menu-item"><span class="item-name">Chilli Prawns</span><span class="item-price">180</span></div>
+          </div>
+          <div class="items" id="milk">
+            <!-- Corrected common spellings while preserving items -->
+            <div class="row" data-name="Vanilla" data-price="75">
+              <div class="name">
+                Vanilla
+                <div class="dots"></div>
+              </div>
+              <div class="price">75</div>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Dinner</div>
-                <div class="menu-item"><span class="item-name">Parotta</span><span class="item-price">15</span></div>
-                <div class="menu-item"><span class="item-name">Veechu Parotta</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Open Veechu Parotta</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Veechu Egg Parotta</span><span class="item-price">70</span></div>
-                <div class="menu-item"><span class="item-name">Piece Parotta</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Kothu Parotta</span><span class="item-price">70</span></div>
-                <div class="menu-item"><span class="item-name">Mutton Kaima Parotta</span><span class="item-price">180</span></div>
-                <div class="menu-item"><span class="item-name">Chicken Kaima Parotta</span><span class="item-price">170</span></div>
-                <div class="menu-item"><span class="item-name">Mutton Muttabak Parotta</span><span class="item-price">180</span></div>
-                <div class="menu-item"><span class="item-name">Chicken Muttabak Parotta</span><span class="item-price">170</span></div>
-                <div class="menu-item"><span class="item-name">Oil Parotta</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Without Oil Parotta</span><span class="item-price">20</span></div>
-                <div class="menu-item"><span class="item-name">Panchu Parotta</span><span class="item-price">25</span></div>
-                <div class="menu-item"><span class="item-name">Sweet Parotta</span><span class="item-price">30</span></div>
-                <div class="menu-item"><span class="item-name">Banana Leaf Mutton Parotta</span><span class="item-price">210</span></div>
-                <div class="menu-item"><span class="item-name">Banana Leaf Chicken Parotta</span><span class="item-price">170</span></div>
-                <div class="menu-item"><span class="item-name">Chappathi</span><span class="item-price">40</span></div>
-                <div class="menu-item"><span class="item-name">Chicken Dum Parotta</span><span class="item-price">300</span></div>
-                <div class="menu-item"><span class="item-name">Mushroom Dosa</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Chicken Dosa</span><span class="item-price">130</span></div>
-                <div class="menu-item"><span class="item-name">Mutton Dosa</span><span class="item-price">160</span></div>
+            <div class="row" data-name="Strawberry" data-price="75">
+              <div class="name">
+                Strawberry
+                <div class="dots"></div>
+              </div>
+              <div class="price">75</div>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Chinese</div>
-                <div class="menu-item"><span class="item-name">Veg Manchuriyan</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Gobi Manchuriyan</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Chilli Gobi Manchuriyan</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Mushroom Gravy</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Mushroom Manchurian</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Crispy Veg</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Szechwan Chicken</span><span class="item-price">150</span></div>
-                <div class="menu-item"><span class="item-name">Chilli Chicken</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Ginger Chicken</span><span class="item-price">140</span></div>
-                <div class="menu-item"><span class="item-name">Dragon Chicken</span><span class="item-price">150</span></div>
-                <div class="menu-item"><span class="item-name">Shawarma Roll</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Shawarma Plate</span><span class="item-price">110</span></div>
+            <div class="row" data-name="Chocolate" data-price="80">
+              <div class="name">
+                Chocolate
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Fried Rice</div>
-                <div class="menu-item"><span class="item-name">Veg Fried Rice</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Egg Fried Rice</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Chicken Fried Rice</span><span class="item-price">120</span></div>
-                <div class="menu-item"><span class="item-name">Mushroom Fried Rice</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Panner Fried Rice</span><span class="item-price">110</span></div>
-                <div class="menu-item"><span class="item-name">Mixed Fried Rice</span><span class="item-price">140</span></div>
-                <div class="menu-item"><span class="item-name">Schezwan Chicken Fried Rice</span><span class="item-price">140</span></div>
-                <div class="menu-item"><span class="item-name">Schezwan Veg Fried Rice</span><span class="item-price">100</span></div>
-                <div class="menu-item"><span class="item-name">Taiwanese Chicken Fried Rice</span><span class="item-price">130</span></div>
-                <div class="menu-item"><span class="item-name">Taiwanese Veg Fried Rice</span><span class="item-price">110</span></div>
+            <div class="row" data-name="Butterscotch" data-price="80">
+              <div class="name">
+                Butterscotch
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Noodles</div>
-                <div class="menu-item"><span class="item-name">Chicken Noodles</span><span class="item-price">110</span></div>
-                <div class="menu-item"><span class="item-name">Veg Noodles</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Egg Noodles</span><span class="item-price">90</span></div>
-                <div class="menu-item"><span class="item-name">Mixed Noodles</span><span class="item-price">130</span></div>
-                <div class="menu-item"><span class="item-name">Schezwan Chicken Noodles</span><span class="item-price">140</span></div>
-                <div class="menu-item"><span class="item-name">Schezwan Veg Noodles</span><span class="item-price">110</span></div>
-                <div class="menu-item"><span class="item-name">Taiwanese Chicken Noodles</span><span class="item-price">140</span></div>
-                <div class="menu-item"><span class="item-name">Taiwanese Veg Noodles</span><span class="item-price">100</span></div>
+            <div class="row" data-name="Pista" data-price="80">
+              <div class="name">
+                Pista
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
             </div>
-            
-            <div class="menu-section">
-                <div class="section-title">Idiyappam / Paya</div>
-                <div class="menu-item"><span class="item-name">Idiyappam / Paya</span><span class="item-price">80</span></div>
-                <div class="menu-item"><span class="item-name">Appam / Chicken Gravy</span><span class="item-price">135</span></div>
+            <div class="row" data-name="Spanish Delight" data-price="80">
+              <div class="name">
+                Spanish Delight
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
             </div>
+            <div class="row" data-name="Black Currant" data-price="80">
+              <div class="name">
+                Black Currant
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Cherry" data-price="80">
+              <div class="name">
+                Cherry
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Cashew" data-price="90">
+              <div class="name">
+                Cashew
+                <div class="dots"></div>
+              </div>
+              <div class="price">90</div>
+            </div>
+            <div class="row" data-name="Fig Fruit" data-price="100">
+              <div class="name">
+                Fig Fruit
+                <div class="dots"></div>
+              </div>
+              <div class="price">100</div>
+            </div>
+            <div class="row" data-name="Kashmir" data-price="85">
+              <div class="name">
+                Kashmir
+                <div class="dots"></div>
+              </div>
+              <div class="price">85</div>
+            </div>
+            <div class="row" data-name="Oman" data-price="80">
+              <div class="name">
+                Oman
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Saudi" data-price="80">
+              <div class="name">
+                Saudi
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Thamam" data-price="80">
+              <div class="name">
+                Thamam
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Mango Shake" data-price="80">
+              <div class="name">
+                Mango Shake
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Papaya" data-price="80">
+              <div class="name">
+                Papaya
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Pineapple" data-price="90">
+              <div class="name">
+                Pineapple
+                <div class="dots"></div>
+              </div>
+              <div class="price">90</div>
+            </div>
+            <div class="row" data-name="Chikku" data-price="80">
+              <div class="name">
+                Chikku
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Pomegranate" data-price="80">
+              <div class="name">
+                Pomegranate
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+            <div class="row" data-name="Tender Coconut" data-price="80">
+              <div class="name">
+                Tender Coconut
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+          </div>
+
+          <div class="separator" role="presentation"></div>
+
+          <details open>
+            <summary>
+              <span class="badge" style="font-size: 1.2rem">Falooda</span>
+              <span
+                aria-hidden="true"
+                style="
+                  margin-left: auto;
+                  color: var(--muted);
+                  font-size: 0.9rem;
+                "
+                >Click to collapse/expand</span
+              >
+            </summary>
+            <div class="items" id="falooda">
+              <div class="row" data-name="Royal Falooda" data-price="150">
+                <div class="name">
+                  Royal Falooda
+                  <div class="dots"></div>
+                </div>
+                <div class="price">150</div>
+              </div>
+              <div class="row" data-name="Pista Falooda" data-price="160">
+                <div class="name">
+                  Pista Falooda
+                  <div class="dots"></div>
+                </div>
+                <div class="price">160</div>
+              </div>
+              <div class="row" data-name="Butter Falooda" data-price="170">
+                <div class="name">
+                  Butter Falooda
+                  <div class="dots"></div>
+                </div>
+                <div class="price">170</div>
+              </div>
+              <div class="row" data-name="MGS Special Falooda" data-price="210">
+                <div class="name">
+                  MGS Special Falooda
+                  <div class="dots"></div>
+                </div>
+                <div class="price">210</div>
+              </div>
+            </div>
+          </details>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="limes-title">
+            <div class="section-head">
+              <span id="limes-title" class="badge">Fresh Limes</span>
+            </div>
+            <div class="items" id="limes">
+              <div class="row" data-name="Fresh Limes" data-price="20">
+                <div class="name">
+                  Fresh Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">20</div>
+              </div>
+              <div class="row" data-name="Ginger Limes" data-price="20">
+                <div class="name">
+                  Ginger Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">20</div>
+              </div>
+              <div class="row" data-name="Mint Limes" data-price="35">
+                <div class="name">
+                  Mint Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">35</div>
+              </div>
+              <div class="row" data-name="Soda Limes" data-price="25">
+                <div class="name">
+                  Soda Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Grapes Limes" data-price="30">
+                <div class="name">
+                  Grapes Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">30</div>
+              </div>
+              <div class="row" data-name="Curry Leaves Limes" data-price="35">
+                <div class="name">
+                  Curry Leaves Limes
+                  <div class="dots"></div>
+                </div>
+                <div class="price">35</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="salad-title">
+            <div class="section-head">
+              <span id="salad-title" class="badge">Fruits Salad</span>
+            </div>
+            <div class="items" id="salads">
+              <div
+                class="row"
+                data-name="Fruits Salad Pudding"
+                data-price="100"
+              >
+                <div class="name">
+                  Fruits Salad Pudding
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Dry Fruits Salad" data-price="80">
+                <div class="name">
+                  Dry Fruits Salad
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="semam-title">
+            <div class="section-head">
+              <span id="semam-title" class="badge">Semam</span>
+            </div>
+            <div class="items" id="semam">
+              <div class="row" data-name="Semam" data-price="80">
+                <div class="name">
+                  Semam
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Badam Shake" data-price="100">
+                <div class="name">
+                  Badam Shake
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Oreo Shake" data-price="80">
+                <div class="name">
+                  Oreo Shake
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Cara Milk Nuts" data-price="80">
+                <div class="name">
+                  Cara Milk Nuts
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Tirtak" data-price="80">
+                <div class="name">
+                  Tirtak
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <section class="card" aria-labelledby="mutton-title">
+          <div class="section-head">
+            <span id="mutton-title" class="badge">Mutton</span>
+            <div class="section-actions">
+              <button
+                class="btn sort"
+                data-target="mutton"
+                data-order="asc"
+                type="button"
+              >
+                Sort ↑ Price
+              </button>
+              <button
+                class="btn sort"
+                data-target="mutton"
+                data-order="desc"
+                type="button"
+              >
+                Sort ↓ Price
+              </button>
+            </div>
+          </div>
+          <div class="items" id="mutton">
+            <div class="row" data-name="Mutton Chops" data-price="190">
+              <div class="name">
+                Mutton Chops
+                <div class="dots"></div>
+              </div>
+              <div class="price">190</div>
+            </div>
+            <div class="row" data-name="Mutton Chukka" data-price="130">
+              <div class="name">
+                Mutton Chukka
+                <div class="dots"></div>
+              </div>
+              <div class="price">130</div>
+            </div>
+            <div class="row" data-name="Mutton Fry" data-price="120">
+              <div class="name">
+                Mutton Fry
+                <div class="dots"></div>
+              </div>
+              <div class="price">120</div>
+            </div>
+            <div class="row" data-name="Mutton Boti Fry" data-price="80">
+              <div class="name">
+                Mutton Boti Fry
+                <div class="dots"></div>
+              </div>
+              <div class="price">80</div>
+            </div>
+          </div>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="fish-title">
+            <div class="section-head">
+              <span id="fish-title" class="badge">Fish</span>
+            </div>
+            <div class="items" id="fish">
+              <div class="row" data-name="Fish Fry" data-price="100">
+                <div class="name">
+                  Fish Fry
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Fish Curry" data-price="100">
+                <div class="name">
+                  Fish Curry
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Fish 65" data-price="100">
+                <div class="name">
+                  Fish 65
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Fish Masala" data-price="120">
+                <div class="name">
+                  Fish Masala
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Chilli Fish" data-price="130">
+                <div class="name">
+                  Chilli Fish
+                  <div class="dots"></div>
+                </div>
+                <div class="price">130</div>
+              </div>
+              <div class="row" data-name="Prawns Fry" data-price="170">
+                <div class="name">
+                  Prawns Fry
+                  <div class="dots"></div>
+                </div>
+                <div class="price">170</div>
+              </div>
+              <div class="row" data-name="Prawns Masala" data-price="180">
+                <div class="name">
+                  Prawns Masala
+                  <div class="dots"></div>
+                </div>
+                <div class="price">180</div>
+              </div>
+              <div class="row" data-name="Prawns Curry" data-price="180">
+                <div class="name">
+                  Prawns Curry
+                  <div class="dots"></div>
+                </div>
+                <div class="price">180</div>
+              </div>
+              <div class="row" data-name="Chilli Prawns" data-price="180">
+                <div class="name">
+                  Chilli Prawns
+                  <div class="dots"></div>
+                </div>
+                <div class="price">180</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="dinner-title">
+            <div class="section-head">
+              <span id="dinner-title" class="badge">Dinner</span>
+            </div>
+            <div class="items" id="dinner">
+              <div class="row" data-name="Parotta" data-price="15">
+                <div class="name">
+                  Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">15</div>
+              </div>
+              <div class="row" data-name="Veechu Parotta" data-price="25">
+                <div class="name">
+                  Veechu Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Open Veechu Parotta" data-price="25">
+                <div class="name">
+                  Open Veechu Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Veechu Egg Parotta" data-price="70">
+                <div class="name">
+                  Veechu Egg Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">70</div>
+              </div>
+              <div class="row" data-name="Piece Parotta" data-price="25">
+                <div class="name">
+                  Piece Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Kothu Parotta" data-price="70">
+                <div class="name">
+                  Kothu Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">70</div>
+              </div>
+              <div
+                class="row"
+                data-name="Mutton Kaima Parotta"
+                data-price="180"
+              >
+                <div class="name">
+                  Mutton Kaima Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">180</div>
+              </div>
+              <div
+                class="row"
+                data-name="Chicken Kaima Parotta"
+                data-price="170"
+              >
+                <div class="name">
+                  Chicken Kaima Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">170</div>
+              </div>
+              <div
+                class="row"
+                data-name="Mutton Muttabak Parotta"
+                data-price="180"
+              >
+                <div class="name">
+                  Mutton Muttabak Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">180</div>
+              </div>
+              <div
+                class="row"
+                data-name="Chicken Muttabak Parotta"
+                data-price="170"
+              >
+                <div class="name">
+                  Chicken Muttabak Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">170</div>
+              </div>
+              <div class="row" data-name="Oil Parotta" data-price="25">
+                <div class="name">
+                  Oil Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Without Oil Parotta" data-price="20">
+                <div class="name">
+                  Without Oil Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">20</div>
+              </div>
+              <div class="row" data-name="Panchu Parotta" data-price="25">
+                <div class="name">
+                  Panchu Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">25</div>
+              </div>
+              <div class="row" data-name="Sweet Parotta" data-price="30">
+                <div class="name">
+                  Sweet Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">30</div>
+              </div>
+              <div
+                class="row"
+                data-name="Banana Leaf Mutton Parotta"
+                data-price="210"
+              >
+                <div class="name">
+                  Banana Leaf Mutton Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">210</div>
+              </div>
+              <div
+                class="row"
+                data-name="Banana Leaf Chicken Parotta"
+                data-price="170"
+              >
+                <div class="name">
+                  Banana Leaf Chicken Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">170</div>
+              </div>
+              <div class="row" data-name="Chappathi" data-price="40">
+                <div class="name">
+                  Chappathi
+                  <div class="dots"></div>
+                </div>
+                <div class="price">40</div>
+              </div>
+              <div class="row" data-name="Chicken Dum Parotta" data-price="300">
+                <div class="name">
+                  Chicken Dum Parotta
+                  <div class="dots"></div>
+                </div>
+                <div class="price">300</div>
+              </div>
+              <div class="row" data-name="Mushroom Dosa" data-price="120">
+                <div class="name">
+                  Mushroom Dosa
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Chicken Dosa" data-price="130">
+                <div class="name">
+                  Chicken Dosa
+                  <div class="dots"></div>
+                </div>
+                <div class="price">130</div>
+              </div>
+              <div class="row" data-name="Mutton Dosa" data-price="160">
+                <div class="name">
+                  Mutton Dosa
+                  <div class="dots"></div>
+                </div>
+                <div class="price">160</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="chinese-title">
+            <div class="section-head">
+              <span id="chinese-title" class="badge">Chinese</span>
+            </div>
+            <div class="items" id="chinese">
+              <div class="row" data-name="Veg Manchurian" data-price="100">
+                <div class="name">
+                  Veg Manchurian
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Gobi Manchurian" data-price="90">
+                <div class="name">
+                  Gobi Manchurian
+                  <div class="dots"></div>
+                </div>
+                <div class="price">90</div>
+              </div>
+              <div
+                class="row"
+                data-name="Chilli Gobi Manchurian"
+                data-price="90"
+              >
+                <div class="name">
+                  Chilli Gobi Manchurian
+                  <div class="dots"></div>
+                </div>
+                <div class="price">90</div>
+              </div>
+              <div class="row" data-name="Mushroom Gravy" data-price="120">
+                <div class="name">
+                  Mushroom Gravy
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Mushroom Manchurian" data-price="120">
+                <div class="name">
+                  Mushroom Manchurian
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Crispy Veg" data-price="120">
+                <div class="name">
+                  Crispy Veg
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Schezwan Chicken" data-price="150">
+                <div class="name">
+                  Schezwan Chicken
+                  <div class="dots"></div>
+                </div>
+                <div class="price">150</div>
+              </div>
+              <div class="row" data-name="Chilli Chicken" data-price="120">
+                <div class="name">
+                  Chilli Chicken
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Ginger Chicken" data-price="140">
+                <div class="name">
+                  Ginger Chicken
+                  <div class="dots"></div>
+                </div>
+                <div class="price">140</div>
+              </div>
+              <div class="row" data-name="Dragon Chicken" data-price="150">
+                <div class="name">
+                  Dragon Chicken
+                  <div class="dots"></div>
+                </div>
+                <div class="price">150</div>
+              </div>
+              <div class="row" data-name="Shawarma Roll" data-price="80">
+                <div class="name">
+                  Shawarma Roll
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Shawarma Plate" data-price="110">
+                <div class="name">
+                  Shawarma Plate
+                  <div class="dots"></div>
+                </div>
+                <div class="price">110</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="fried-title">
+            <div class="section-head">
+              <span id="fried-title" class="badge">Fried Rice</span>
+            </div>
+            <div class="items" id="fried">
+              <div class="row" data-name="Veg Fried Rice" data-price="80">
+                <div class="name">
+                  Veg Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Egg Fried Rice" data-price="90">
+                <div class="name">
+                  Egg Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">90</div>
+              </div>
+              <div class="row" data-name="Chicken Fried Rice" data-price="120">
+                <div class="name">
+                  Chicken Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">120</div>
+              </div>
+              <div class="row" data-name="Mushroom Fried Rice" data-price="100">
+                <div class="name">
+                  Mushroom Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div class="row" data-name="Paneer Fried Rice" data-price="110">
+                <div class="name">
+                  Paneer Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">110</div>
+              </div>
+              <div class="row" data-name="Mixed Fried Rice" data-price="140">
+                <div class="name">
+                  Mixed Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">140</div>
+              </div>
+              <div
+                class="row"
+                data-name="Schezwan Chicken Fried Rice"
+                data-price="140"
+              >
+                <div class="name">
+                  Schezwan Chicken Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">140</div>
+              </div>
+              <div
+                class="row"
+                data-name="Schezwan Veg Fried Rice"
+                data-price="100"
+              >
+                <div class="name">
+                  Schezwan Veg Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+              <div
+                class="row"
+                data-name="Taiwanese Chicken Fried Rice"
+                data-price="130"
+              >
+                <div class="name">
+                  Taiwanese Chicken Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">130</div>
+              </div>
+              <div
+                class="row"
+                data-name="Taiwanese Veg Fried Rice"
+                data-price="110"
+              >
+                <div class="name">
+                  Taiwanese Veg Fried Rice
+                  <div class="dots"></div>
+                </div>
+                <div class="price">110</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="noodles-title">
+            <div class="section-head">
+              <span id="noodles-title" class="badge">Noodles</span>
+            </div>
+            <div class="items" id="noodles">
+              <div class="row" data-name="Chicken Noodles" data-price="110">
+                <div class="name">
+                  Chicken Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">110</div>
+              </div>
+              <div class="row" data-name="Veg Noodles" data-price="80">
+                <div class="name">
+                  Veg Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div class="row" data-name="Egg Noodles" data-price="90">
+                <div class="name">
+                  Egg Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">90</div>
+              </div>
+              <div class="row" data-name="Mixed Noodles" data-price="130">
+                <div class="name">
+                  Mixed Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">130</div>
+              </div>
+              <div
+                class="row"
+                data-name="Schezwan Chicken Noodles"
+                data-price="140"
+              >
+                <div class="name">
+                  Schezwan Chicken Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">140</div>
+              </div>
+              <div
+                class="row"
+                data-name="Schezwan Veg Noodles"
+                data-price="110"
+              >
+                <div class="name">
+                  Schezwan Veg Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">110</div>
+              </div>
+              <div
+                class="row"
+                data-name="Taiwanese Chicken Noodles"
+                data-price="140"
+              >
+                <div class="name">
+                  Taiwanese Chicken Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">140</div>
+              </div>
+              <div
+                class="row"
+                data-name="Taiwanese Veg Noodles"
+                data-price="100"
+              >
+                <div class="name">
+                  Taiwanese Veg Noodles
+                  <div class="dots"></div>
+                </div>
+                <div class="price">100</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="separator" role="presentation"></div>
+
+          <section aria-labelledby="idiyappam-title">
+            <div class="section-head">
+              <span id="idiyappam-title" class="badge">Idiyappam / Paya</span>
+            </div>
+            <div class="items" id="idiyappam">
+              <div class="row" data-name="Idiyappam / Paya" data-price="80">
+                <div class="name">
+                  Idiyappam / Paya
+                  <div class="dots"></div>
+                </div>
+                <div class="price">80</div>
+              </div>
+              <div
+                class="row"
+                data-name="Appam / Chicken Gravy"
+                data-price="135"
+              >
+                <div class="name">
+                  Appam / Chicken Gravy
+                  <div class="dots"></div>
+                </div>
+                <div class="price">135</div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <section class="card" aria-labelledby="gallery-title">
+        <div class="section-head">
+          <span id="gallery-title" class="badge">Popular Dishes</span>
         </div>
-        
-        <!-- Food Images -->
-        <div class="menu-images">
-            <div class="menu-image food-1">
-                <img src="https://images.pexels.com/photos/1108117/pexels-photo-1108117.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
-            </div>
-            <div class="menu-image food-2">
-                <img src="https://images.pexels.com/photos/1482803/pexels-photo-1482803.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
-            </div>
-            <div class="menu-image food-3">
-                <img src="https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
-            </div>
-            <div class="menu-image food-4">
-                <img src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
-            </div>
-            <div class="menu-image food-5">
-                <img src="https://images.pexels.com/photos/103566/pexels-photo-103566.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
-            </div>
+        <div class="gallery" role="list">
+          <figure role="listitem">
+            <img
+              src="https://images.pexels.com/photos/1108117/pexels-photo-1108117.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Cold coffee with ice cream"
+            />
+            <figcaption>Cold Coffee</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img
+              src="https://images.pexels.com/photos/1482803/pexels-photo-1482803.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Falooda dessert in tall glass"
+            />
+            <figcaption>Falooda</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img
+              src="https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Fish fry served on plate"
+            />
+            <figcaption>Fish Fry</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img
+              src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Noodles in a bowl"
+            />
+            <figcaption>Noodles</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img
+              src="https://images.pexels.com/photos/103566/pexels-photo-103566.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Scoops of ice cream"
+            />
+            <figcaption>Ice Cream</figcaption>
+          </figure>
         </div>
+      </section>
     </div>
 
     <script>
-        // JavaScript can be used to add interactivity if needed
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Menu loaded successfully');
-            
-            // Example: Add hover effect to menu items
-            const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                item.addEventListener('mouseover', function() {
-                    this.style.backgroundColor = 'rgba(255, 153, 51, 0.2)';
-                });
-                
-                item.addEventListener('mouseout', function() {
-                    this.style.backgroundColor = 'transparent';
-                });
-            });
+      // Accessibility helpers
+      const qs = (s, el = document) => el.querySelector(s);
+      const qsa = (s, el = document) => [...el.querySelectorAll(s)];
+
+      // Global Search
+      const searchInput = qs("#search");
+      const clearBtn = qs("#clear");
+
+      const filterMenu = () => {
+        const term = searchInput.value.trim().toLowerCase();
+        qsa(".row").forEach((row) => {
+          const name = row.dataset.name.toLowerCase();
+          row.style.display = name.includes(term) ? "" : "none";
         });
+      };
+      searchInput.addEventListener("input", filterMenu);
+      clearBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        filterMenu();
+        searchInput.focus();
+      });
+
+      // Sorting within sections by price
+      const sortButtons = qsa(".sort");
+      sortButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const target = qs("#" + btn.dataset.target);
+          const rows = qsa(".row", target);
+          const order = btn.dataset.order === "asc" ? 1 : -1;
+          rows
+            .sort(
+              (a, b) =>
+                (parseFloat(a.dataset.price) - parseFloat(b.dataset.price)) *
+                order
+            )
+            .forEach((r) => target.appendChild(r));
+        });
+      });
+
+      // Toggle currency symbol (useful if prices are unit-less)
+      qs("#toggle-currency").addEventListener("click", () => {
+        const has = getComputedStyle(document.documentElement)
+          .getPropertyValue("--currency")
+          .trim();
+        document.documentElement.style.setProperty(
+          "--currency",
+          has ? "''" : "'\\20B9'"
+        );
+      });
+
+      // Hover highlight via keyboard focus
+      qsa(".row").forEach((r) => {
+        r.tabIndex = 0;
+      });
+
+      // Initial console log
+      console.log(
+        "%c Menu loaded successfully ",
+        "padding:4px 8px; background:#ff9933; color:#111; border-radius:6px"
+      );
     </script>
-</body>
+  </body>
 </html>
