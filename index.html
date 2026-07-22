@@ -1,1409 +1,1291 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Restaurant Menu</title>
-    <meta
-      name="description"
-      content="Modern, responsive, accessible restaurant menu with search, section toggles, and print-friendly layout."
-    />
-    <style>
-        :root{
-      --bg:#111213;
-      --card:#1a1b1e;
-      --muted:#9aa1ac;
-      --text:#f7f8fa;
-      --brand:#ff9933;
-      --brand-weak: rgba(255,153,51,.12);
-      --ring: 0 0 0 .12rem rgba(255,153,51,.6);
-      --radius: 18px;
-      --shadow: 0 12px 30px rgba(0,0,0,.35);
-      --currency:'\20A8'; /* changed to Pakistani Rupee symbol */
-      --gap: 14px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      --script: "Brush Script MT", "Comic Sans MS", cursive;
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flavors Restaurant - Menu</title>
+  <meta name="description" content="Flavors Restaurant - Explore our delicious menu with 100+ dishes. Order online for pickup or delivery." />
+  <meta name="theme-color" content="#e63946" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23e63946'/%3E%3Ctext x='96' y='125' text-anchor='middle' font-size='100'%3E%F0%9F%8D%BD%3C/text%3E%3C/svg%3E" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Flavors" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES
+       ============================================= */
+    :root {
+      --primary: #e63946;
+      --primary-light: #ff6b6b;
+      --primary-dark: #c1121f;
+      --secondary: #f4a261;
+      --secondary-light: #f6bd7a;
+      --accent: #2a9d8f;
+      --accent-light: #40b5a6;
+      --bg: #fff8f0;
+      --bg-card: #ffffff;
+      --bg-hero: linear-gradient(135deg, #fff1e6 0%, #ffe8d6 50%, #ffd6ba 100%);
+      --text: #2d3436;
+      --text-secondary: #636e72;
+      --text-muted: #b2bec3;
+      --border: rgba(0,0,0,0.06);
+      --border-hover: rgba(230,57,70,0.3);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+      --shadow-glow: 0 0 20px rgba(230,57,70,0.15);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --header-h: 64px;
+      --bottom-h: 68px;
     }
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        padding: 22px;
-        color: var(--text);
-        background: radial-gradient(
-          80% 80% at 100% 0%,
-          #1b1c1f 0%,
-          var(--bg) 60%
-        );
-        font-family: var(--font);
-        line-height: 1.5;
-        -webkit-font-smoothing: antialiased;
-        letter-spacing: 0.1px;
-      }
+    [data-theme="dark"] {
+      --bg: #1a1a2e;
+      --bg-card: #16213e;
+      --bg-hero: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --text: #f0f0f0;
+      --text-secondary: #a0a0b0;
+      --text-muted: #555570;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(230,57,70,0.4);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+      --shadow-glow: 0 0 20px rgba(230,57,70,0.25);
+    }
 
-      .container {
-        max-width: 1200px;
-        margin-inline: auto;
-      }
+    /* =============================================
+       RESET & BASE
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+      padding-bottom: calc(var(--bottom-h) + 16px);
+    }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    input { font-family: inherit; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 99px; }
 
-      .app-header {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        justify-content: space-between;
-        margin-bottom: 18px;
-        flex-wrap: wrap;
-      }
-      .title {
-        font-family: var(--script);
-        font-size: clamp(2.2rem, 5vw, 3.6rem);
-        letter-spacing: 0.5px;
-      }
-      .tools {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-      .search {
-        position: relative;
-      }
-      .search input {
-        width: min(360px, 86vw);
-        padding: 12px 40px 12px 14px;
-        border-radius: 999px;
-        border: 1px solid #2a2c31;
-        background: #0f1012;
-        color: var(--text);
-        outline: none;
-        box-shadow: none;
-        transition: border 0.2s, box-shadow 0.2s;
-      }
-      .search input:focus {
-        border-color: var(--brand);
-        box-shadow: var(--ring);
-      }
-      .clear-btn {
-        position: absolute;
-        right: 6px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
-        border: none;
-        color: var(--muted);
-        cursor: pointer;
-        padding: 6px 10px;
-        border-radius: 10px;
-      }
-      .clear-btn:hover {
-        color: var(--text);
-      }
+    /* =============================================
+       SCROLL PROGRESS BAR
+       ============================================= */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px; z-index: 999;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      width: 0%; transition: width 0.1s linear;
+    }
 
-      .grid {
-        display: grid;
-        gap: var(--gap);
-        grid-template-columns: 1fr; /* mobile */
-      }
-      @media (min-width: 820px) {
-        .grid {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
+    /* =============================================
+       OFFLINE BANNER
+       ============================================= */
+    .offline-banner {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff; text-align: center; padding: 8px 16px;
+      font-size: 0.82rem; font-weight: 600; z-index: 300;
+      transform: translateY(-100%); transition: transform 0.3s ease;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .offline-banner.visible { transform: translateY(0); }
+    body.is-offline .sticky-header { top: 33px; }
+    body.is-offline .category-tabs-wrapper { top: calc(var(--header-h) + 33px); }
 
-      .card {
-        background: var(--card);
-        border: 1px solid #24262b;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 18px;
-      }
+    /* =============================================
+       UPDATE TOAST
+       ============================================= */
+    .update-toast {
+      position: fixed; top: calc(var(--header-h) + 12px); left: 50%;
+      transform: translateX(-50%) translateY(-120%);
+      background: var(--bg-card); border: 2px solid var(--primary);
+      border-radius: var(--radius-lg); padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: var(--shadow-lg), var(--shadow-glow); z-index: 200;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 90vw;
+    }
+    .update-toast.visible { transform: translateX(-50%) translateY(0); }
+    .update-toast i { color: var(--primary); font-size: 1.2rem; }
+    .update-toast span { font-size: 0.9rem; font-weight: 500; }
+    .update-toast button {
+      padding: 8px 16px; border-radius: var(--radius-full);
+      background: var(--primary); color: #fff; font-size: 0.85rem; font-weight: 600;
+    }
 
-      .section-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 10px;
-      }
-      .badge {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 18px;
-        border-radius: 999px;
-        font-family: var(--script);
-        font-size: 1.4rem;
-        letter-spacing: 0.3px;
-        color: #1b1b1b;
-        background: linear-gradient(90deg, var(--brand) 0%, #ffc27a 100%);
-      }
+    /* =============================================
+       HERO SECTION
+       ============================================= */
+    .hero {
+      position: relative; min-height: 480px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 100px 20px 60px;
+      background: var(--bg-hero); overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(230,57,70,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(244,162,97,0.08) 0%, transparent 50%);
+    }
+    .hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .hero-particle {
+      position: absolute; width: 4px; height: 4px;
+      background: var(--primary); border-radius: 50%; opacity: 0;
+      animation: floatP 8s infinite ease-in-out;
+    }
+    @keyframes floatP {
+      0%, 100% { opacity: 0; transform: translateY(100vh) scale(0); }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
+      50% { transform: translateY(-20vh) scale(1); }
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg-card); padding: 6px 16px; border-radius: var(--radius-full);
+      font-size: 0.8rem; font-weight: 600; color: var(--primary);
+      box-shadow: var(--shadow-sm); margin-bottom: 20px;
+      animation: fadeInUp 0.8s ease both;
+    }
+    .hero h1 {
+      font-family: var(--font-heading); font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 900; letter-spacing: -0.02em; line-height: 1.1;
+      margin-bottom: 12px; animation: fadeInUp 0.8s ease 0.1s both;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      color: var(--text-secondary); margin-bottom: 32px;
+      font-weight: 300; animation: fadeInUp 0.8s ease 0.2s both;
+    }
+    .hero-search {
+      position: relative; width: 100%; max-width: 500px;
+      margin: 0 auto 24px; animation: fadeInUp 0.8s ease 0.3s both;
+    }
+    .hero-search input {
+      width: 100%; padding: 16px 52px 16px 52px;
+      border: 2px solid var(--border); border-radius: var(--radius-full);
+      background: var(--bg-card); color: var(--text); font-size: 1rem;
+      outline: none; transition: all var(--transition); box-shadow: var(--shadow-md);
+    }
+    .hero-search input:focus { border-color: var(--primary); box-shadow: var(--shadow-glow); }
+    .hero-search input::placeholder { color: var(--text-muted); }
+    .hero-search .si { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
+    .hero-search .cs {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.1rem; padding: 8px; border-radius: 50%; display: none;
+      transition: all var(--transition);
+    }
+    .hero-search .cs.vis { display: block; }
+    .hero-search .cs:hover { color: var(--primary); }
+    .hero-actions {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+    .btn-hero {
+      padding: 13px 28px; border-radius: var(--radius-full);
+      font-size: 0.92rem; font-weight: 600; display: inline-flex;
+      align-items: center; gap: 8px; transition: all var(--transition);
+    }
+    .btn-hero.pri {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff; box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+    }
+    .btn-hero.pri:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(230,57,70,0.4); }
+    .btn-hero.sec {
+      background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
+    }
+    .btn-hero.sec:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-      .section-actions {
-        display: flex;
-        gap: 6px;
-      }
-      .btn {
-        appearance: none;
-        border: 1px solid #2b2f36;
-        background: #0f1012;
-        color: var(--text);
-        padding: 8px 12px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 0.9rem;
-      }
-      .btn:hover {
-        border-color: var(--brand);
-        background: var(--brand-weak);
-      }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-      .items {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
+    /* =============================================
+       STICKY HEADER
+       ============================================= */
+    .sticky-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-card); border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      transition: all var(--transition);
+    }
+    .sticky-header.scrolled { box-shadow: var(--shadow-md); }
+    .nav-c {
+      max-width: 1200px; margin: 0 auto; padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: var(--header-h); gap: 16px;
+    }
+    .nav-brand {
+      font-family: var(--font-heading); font-size: 1.3rem;
+      font-weight: 700; color: var(--primary);
+      display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    }
+    .nav-controls { display: flex; align-items: center; gap: 6px; }
+    .nav-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text); display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: all var(--transition); position: relative;
+    }
+    .nav-btn:hover { border-color: var(--primary); color: var(--primary); box-shadow: var(--shadow-glow); }
+    .nav-btn .bc {
+      position: absolute; top: -4px; right: -4px;
+      width: 18px; height: 18px; background: var(--primary); color: #fff;
+      font-size: 0.65rem; font-weight: 700; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn .nd {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #22c55e; position: absolute; top: 6px; right: 6px;
+      border: 2px solid var(--bg-card); transition: background var(--transition);
+    }
+    .nav-btn .nd.off { background: #ef4444; }
+    .theme-btn {
+      background: none; border: none; color: var(--text);
+      font-size: 1.15rem; padding: 8px; border-radius: 50%;
+      transition: all var(--transition); display: flex; align-items: center; justify-content: center;
+    }
+    .theme-btn:hover { color: var(--primary); }
 
-      /* Item row with dotted leader to price */
-      .row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: baseline;
-        gap: 12px;
-        padding: 8px 10px;
-        border-radius: 10px;
-      }
-      .row:hover {
-        background: var(--brand-weak);
-      }
+    /* =============================================
+       CATEGORY TABS
+       ============================================= */
+    .category-tabs-wrapper {
+      background: var(--bg-card); border-bottom: 1px solid var(--border);
+      position: sticky; top: var(--header-h); z-index: 90;
+    }
+    .category-tabs {
+      max-width: 1200px; margin: 0 auto; padding: 12px 20px;
+      display: flex; gap: 8px; overflow-x: auto;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .category-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      padding: 8px 18px; border-radius: var(--radius-full);
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text-secondary); font-size: 0.82rem; font-weight: 500;
+      white-space: nowrap; scroll-snap-align: start;
+      transition: all var(--transition); display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .cat-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .cat-tab.active {
+      background: var(--primary); color: #fff; border-color: transparent;
+      box-shadow: 0 2px 10px rgba(230,57,70,0.3);
+    }
+    .cat-tab .cnt {
+      background: rgba(255,255,255,0.2); padding: 1px 7px;
+      border-radius: var(--radius-full); font-size: 0.72rem;
+    }
+    .cat-tab.active .cnt { background: rgba(255,255,255,0.3); }
 
-      .name {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 0;
-      }
-      .dots {
-        flex: 1;
-        border-bottom: 1px dotted #3a3e45;
-        opacity: 0.7;
-        margin-inline: 8px;
-      }
+    /* =============================================
+       MAIN CONTENT
+       ============================================= */
+    .main-content {
+      max-width: 1200px; margin: 0 auto; padding: 30px 20px 40px;
+    }
+    .no-results { text-align: center; padding: 60px 20px; display: none; }
+    .no-results.vis { display: block; }
+    .no-results i { font-size: 3rem; color: var(--text-muted); margin-bottom: 16px; }
+    .no-results h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 8px; }
+    .no-results p { color: var(--text-secondary); }
 
-      .price {
-        font-variant-numeric: tabular-nums;
-        font-weight: 700;
-        color: var(--brand);
-      }
-      .price::before {
-        content: var(--currency) "\00A0";
-      }
+    /* =============================================
+       MENU SECTION
+       ============================================= */
+    .menu-section {
+      margin-bottom: 48px; opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .menu-section.vis { opacity: 1; transform: translateY(0); }
+    .menu-section.hidden { display: none; }
+    .sec-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+    .sec-icon {
+      width: 44px; height: 44px; border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .sec-title-group { flex: 1; min-width: 0; }
+    .sec-title {
+      font-family: var(--font-heading); font-size: clamp(1.3rem, 3vw, 1.7rem);
+      font-weight: 700; line-height: 1.2;
+    }
+    .sec-sub { font-size: 0.82rem; color: var(--text-muted); }
+    .sec-count {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff; padding: 4px 12px; border-radius: var(--radius-full);
+      font-size: 0.78rem; font-weight: 600; flex-shrink: 0;
+    }
 
-      /* Food gallery */
-      .gallery {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(120px, 1fr));
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .gallery figure {
-        margin: 0;
-        overflow: hidden;
-        border-radius: 14px;
-        border: 1px solid #25272d;
-        background: #0e0f11;
-      }
-      .gallery img {
-        display: block;
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        transition: transform 0.25s ease;
-      }
-      .gallery figure:hover img {
-        transform: scale(1.05);
-      }
-      .gallery figcaption {
-        font-size: 0.85rem;
-        color: var(--muted);
-        padding: 6px 8px;
-      }
-      @media (max-width: 760px) {
-        .gallery {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
+    /* =============================================
+       MENU GRID & CARDS
+       ============================================= */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 640px) { .menu-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 900px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1100px) { .menu-grid { grid-template-columns: repeat(4, 1fr); } }
 
-      /* Pretty section separators on print too */
-      .separator {
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          #2b2f36 20%,
-          #2b2f36 80%,
-          transparent
-        );
-        margin: 12px 0;
-      }
+    .menu-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      cursor: pointer; transition: all var(--transition);
+      position: relative; display: flex; flex-direction: column;
+    }
+    .menu-card:hover {
+      transform: translateY(-6px) rotate(0.5deg);
+      box-shadow: var(--shadow-lg); border-color: var(--border-hover);
+    }
+    .menu-card:active { transform: translateY(-2px) rotate(0); }
 
-      /* Collapsible */
-      details {
-        background: #121316;
-        border-radius: 14px;
-        border: 1px solid #22242a;
-        padding: 10px 12px;
-      }
-      details[open] {
-        background: #13151a;
-      }
-      summary {
-        list-style: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 6px;
-        border-radius: 10px;
-      }
-      summary::-webkit-details-marker {
-        display: none;
-      }
-      summary:focus-visible {
-        outline: none;
-        box-shadow: var(--ring);
-      }
+    .card-img-wrap {
+      position: relative; width: 100%; padding-top: 60%;
+      background: var(--bg); overflow: hidden;
+    }
+    .card-img-wrap img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; transition: transform 0.5s ease;
+    }
+    .menu-card:hover .card-img-wrap img { transform: scale(1.1); }
+    .card-img-wrap .emoji-fallback {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; background: linear-gradient(135deg, rgba(230,57,70,0.05), rgba(244,162,97,0.05));
+    }
+    .card-img-wrap img.loaded + .emoji-fallback { display: none; }
+    .card-img-wrap img.err { display: none; }
 
-      /* Print styles */
-      @media print {
-        body {
-          background: #fff;
-          color: #000;
-          padding: 0;
-        }
-        .card {
-          box-shadow: none;
-          border: 0;
-        }
-        .btn,
-        .tools,
-        .gallery {
-          display: none !important;
-        }
-        .title {
-          font-size: 2.2rem;
-        }
-        .row {
-          padding: 4px 0;
-        }
-        .price {
-          color: #000;
-        }
-        :root {
-          --currency: "";
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container" role="application" aria-label="Restaurant menu">
-      <header class="app-header">
-        <h1 class="title">Menu List</h1>
-        <div class="tools">
-          <label class="search" aria-label="Search dishes">
-            <input
-              id="search"
-              type="search"
-              placeholder="Search items (e.g., Parotta, Falooda)…"
-              autocomplete="off"
-            />
-            <button
-              class="clear-btn"
-              aria-label="Clear search"
-              title="Clear"
-              type="button"
-              id="clear"
-            >
-              ✕
-            </button>
-          </label>
-          <button
-            class="btn"
-            id="toggle-currency"
-            type="button"
-            title="Toggle currency symbol"
-          >
-            Toggle $
-          </button>
-        </div>
-      </header>
+    .card-badges {
+      position: absolute; top: 10px; left: 10px;
+      display: flex; gap: 4px; flex-wrap: wrap;
+    }
+    .card-badge {
+      padding: 3px 10px; border-radius: var(--radius-full);
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; backdrop-filter: blur(8px);
+    }
+    .badge-pop { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
+    .badge-new { background: linear-gradient(135deg, var(--accent), #40b5a6); color: #fff; }
+    .badge-chef { background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; }
+    .badge-veg { background: rgba(34,197,94,0.9); color: #fff; }
+    .badge-sold { background: rgba(239,68,68,0.9); color: #fff; }
 
-      <main class="grid" id="menu" tabindex="-1">
-        <!-- LEFT COLUMN -->
-        <section class="card" aria-labelledby="milk-title">
-          <div class="section-head">
-            <span id="milk-title" class="badge">Milkshake & Ice Cream</span>
-            <div class="section-actions">
-              <button
-                class="btn sort"
-                data-target="milk"
-                data-order="asc"
-                type="button"
-              >
-                Sort ↑ Price
-              </button>
-              <button
-                class="btn sort"
-                data-target="milk"
-                data-order="desc"
-                type="button"
-              >
-                Sort ↓ Price
-              </button>
-            </div>
-          </div>
-          <div class="items" id="milk">
-            <!-- Corrected common spellings while preserving items -->
-            <div class="row" data-name="Vanilla" data-price="75">
-              <div class="name">
-                Vanilla
-                <div class="dots"></div>
-              </div>
-              <div class="price">75</div>
-            </div>
-            <div class="row" data-name="Strawberry" data-price="75">
-              <div class="name">
-                Strawberry
-                <div class="dots"></div>
-              </div>
-              <div class="price">75</div>
-            </div>
-            <div class="row" data-name="Chocolate" data-price="80">
-              <div class="name">
-                Chocolate
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Butterscotch" data-price="80">
-              <div class="name">
-                Butterscotch
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Pista" data-price="80">
-              <div class="name">
-                Pista
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Spanish Delight" data-price="80">
-              <div class="name">
-                Spanish Delight
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Black Currant" data-price="80">
-              <div class="name">
-                Black Currant
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Cherry" data-price="80">
-              <div class="name">
-                Cherry
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Cashew" data-price="90">
-              <div class="name">
-                Cashew
-                <div class="dots"></div>
-              </div>
-              <div class="price">90</div>
-            </div>
-            <div class="row" data-name="Fig Fruit" data-price="100">
-              <div class="name">
-                Fig Fruit
-                <div class="dots"></div>
-              </div>
-              <div class="price">100</div>
-            </div>
-            <div class="row" data-name="Kashmir" data-price="85">
-              <div class="name">
-                Kashmir
-                <div class="dots"></div>
-              </div>
-              <div class="price">85</div>
-            </div>
-            <div class="row" data-name="Oman" data-price="80">
-              <div class="name">
-                Oman
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Saudi" data-price="80">
-              <div class="name">
-                Saudi
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Thamam" data-price="80">
-              <div class="name">
-                Thamam
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Mango Shake" data-price="80">
-              <div class="name">
-                Mango Shake
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Papaya" data-price="80">
-              <div class="name">
-                Papaya
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Pineapple" data-price="90">
-              <div class="name">
-                Pineapple
-                <div class="dots"></div>
-              </div>
-              <div class="price">90</div>
-            </div>
-            <div class="row" data-name="Chikku" data-price="80">
-              <div class="name">
-                Chikku
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Pomegranate" data-price="80">
-              <div class="name">
-                Pomegranate
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-            <div class="row" data-name="Tender Coconut" data-price="80">
-              <div class="name">
-                Tender Coconut
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-          </div>
+    .card-quick-add {
+      position: absolute; bottom: 10px; right: 10px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; box-shadow: 0 2px 8px rgba(230,57,70,0.4);
+      transition: all var(--transition); opacity: 0; transform: scale(0.8);
+    }
+    .menu-card:hover .card-quick-add { opacity: 1; transform: scale(1); }
+    .card-quick-add:active { transform: scale(0.9); }
 
-          <div class="separator" role="presentation"></div>
+    .card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+    .card-name {
+      font-weight: 600; font-size: 0.95rem; line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; flex: 1;
+    }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-top: 1px solid var(--border);
+    }
+    .card-price {
+      font-family: var(--font-heading); font-size: 1.15rem;
+      font-weight: 700; color: var(--primary);
+    }
+    .card-price::before { content: '$'; font-size: 0.8em; }
+    .card-rating {
+      font-size: 0.75rem; color: var(--secondary); display: flex; align-items: center; gap: 3px;
+    }
 
-          <details open>
-            <summary>
-              <span class="badge" style="font-size: 1.2rem">Falooda</span>
-              <span
-                aria-hidden="true"
-                style="
-                  margin-left: auto;
-                  color: var(--muted);
-                  font-size: 0.9rem;
-                "
-                >Click to collapse/expand</span
-              >
-            </summary>
-            <div class="items" id="falooda">
-              <div class="row" data-name="Royal Falooda" data-price="150">
-                <div class="name">
-                  Royal Falooda
-                  <div class="dots"></div>
-                </div>
-                <div class="price">150</div>
-              </div>
-              <div class="row" data-name="Pista Falooda" data-price="160">
-                <div class="name">
-                  Pista Falooda
-                  <div class="dots"></div>
-                </div>
-                <div class="price">160</div>
-              </div>
-              <div class="row" data-name="Butter Falooda" data-price="170">
-                <div class="name">
-                  Butter Falooda
-                  <div class="dots"></div>
-                </div>
-                <div class="price">170</div>
-              </div>
-              <div class="row" data-name="MGS Special Falooda" data-price="210">
-                <div class="name">
-                  MGS Special Falooda
-                  <div class="dots"></div>
-                </div>
-                <div class="price">210</div>
-              </div>
-            </div>
-          </details>
+    /* =============================================
+       MODAL
+       ============================================= */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; visibility: hidden;
+      transition: all var(--transition);
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal {
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      max-width: 440px; width: 100%; overflow: hidden;
+      transform: scale(0.9) translateY(20px);
+      transition: transform var(--transition); box-shadow: var(--shadow-lg);
+    }
+    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+    .modal-img {
+      width: 100%; height: 220px; object-fit: cover;
+    }
+    .modal-img-wrap {
+      position: relative; width: 100%; height: 220px;
+      background: var(--bg); display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+    }
+    .modal-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg-card); color: var(--text);
+      font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition); z-index: 2;
+    }
+    .modal-close:hover { background: var(--primary); color: #fff; }
+    .modal-body { padding: 24px; }
+    .modal-name {
+      font-family: var(--font-heading); font-size: 1.5rem;
+      font-weight: 700; margin-bottom: 4px;
+    }
+    .modal-cat { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px; }
+    .modal-badges { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .modal-desc { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+    .modal-price {
+      font-family: var(--font-heading); font-size: 2rem;
+      font-weight: 800; color: var(--primary); margin-bottom: 24px;
+    }
+    .modal-price::before { content: '$'; font-size: 0.8em; }
+    .modal-actions { display: flex; gap: 12px; }
+    .modal-btn {
+      flex: 1; padding: 14px; border-radius: var(--radius-md);
+      font-size: 1rem; font-weight: 600; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+      transition: all var(--transition);
+    }
+    .modal-btn.order {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff; box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+    }
+    .modal-btn.order:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(230,57,70,0.4); }
+    .modal-btn.close-m {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    }
 
-          <div class="separator" role="presentation"></div>
+    /* =============================================
+       BACK TO TOP
+       ============================================= */
+    .back-top {
+      position: fixed; bottom: calc(var(--bottom-h) + 20px); right: 20px;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+      z-index: 80; opacity: 0; visibility: hidden;
+      transform: translateY(20px); transition: all var(--transition);
+    }
+    .back-top.vis { opacity: 1; visibility: visible; transform: translateY(0); }
+    .back-top:hover { transform: translateY(-4px); }
 
-          <section aria-labelledby="limes-title">
-            <div class="section-head">
-              <span id="limes-title" class="badge">Fresh Limes</span>
-            </div>
-            <div class="items" id="limes">
-              <div class="row" data-name="Fresh Limes" data-price="20">
-                <div class="name">
-                  Fresh Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">20</div>
-              </div>
-              <div class="row" data-name="Ginger Limes" data-price="20">
-                <div class="name">
-                  Ginger Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">20</div>
-              </div>
-              <div class="row" data-name="Mint Limes" data-price="35">
-                <div class="name">
-                  Mint Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">35</div>
-              </div>
-              <div class="row" data-name="Soda Limes" data-price="25">
-                <div class="name">
-                  Soda Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Grapes Limes" data-price="30">
-                <div class="name">
-                  Grapes Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">30</div>
-              </div>
-              <div class="row" data-name="Curry Leaves Limes" data-price="35">
-                <div class="name">
-                  Curry Leaves Limes
-                  <div class="dots"></div>
-                </div>
-                <div class="price">35</div>
-              </div>
-            </div>
-          </section>
+    /* =============================================
+       FLOATING ORDER
+       ============================================= */
+    .float-order {
+      position: fixed; bottom: calc(var(--bottom-h) + 20px); left: 20px;
+      padding: 14px 24px; border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff; font-size: 0.9rem; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 20px rgba(230,57,70,0.3);
+      z-index: 80; transition: all var(--transition);
+      animation: pulseFloat 3s infinite ease-in-out;
+    }
+    @keyframes pulseFloat {
+      0%, 100% { box-shadow: 0 4px 20px rgba(230,57,70,0.3); }
+      50% { box-shadow: 0 4px 30px rgba(230,57,70,0.5), 0 0 40px rgba(230,57,70,0.2); }
+    }
+    .float-order:hover { transform: translateY(-3px) scale(1.02); }
+    @media (max-width: 768px) {
+      .float-order { bottom: calc(var(--bottom-h) + 16px); left: 16px; padding: 12px 20px; font-size: 0.85rem; }
+    }
 
-          <div class="separator" role="presentation"></div>
+    /* =============================================
+       BOTTOM NAV
+       ============================================= */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--bottom-h); background: var(--bg-card);
+      border-top: 1px solid var(--border); display: none;
+      z-index: 100; backdrop-filter: blur(20px);
+    }
+    .bottom-nav-inner {
+      max-width: 500px; margin: 0 auto; height: 100%;
+      display: flex; align-items: center; justify-content: space-around; padding: 0 10px;
+    }
+    .bn-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; padding: 8px 12px; border-radius: var(--radius-md);
+      color: var(--text-muted); font-size: 0.68rem; font-weight: 500;
+      transition: all var(--transition); position: relative;
+    }
+    .bn-item i { font-size: 1.15rem; }
+    .bn-item.active { color: var(--primary); }
+    .bn-item.active::before {
+      content: ''; position: absolute; top: -1px;
+      left: 50%; transform: translateX(-50%);
+      width: 24px; height: 3px; background: var(--primary);
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    }
+    .bn-item:hover { color: var(--primary); }
+    @media (max-width: 768px) { .bottom-nav { display: block; } }
 
-          <section aria-labelledby="salad-title">
-            <div class="section-head">
-              <span id="salad-title" class="badge">Fruits Salad</span>
-            </div>
-            <div class="items" id="salads">
-              <div
-                class="row"
-                data-name="Fruits Salad Pudding"
-                data-price="100"
-              >
-                <div class="name">
-                  Fruits Salad Pudding
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Dry Fruits Salad" data-price="80">
-                <div class="name">
-                  Dry Fruits Salad
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-            </div>
-          </section>
+    /* =============================================
+       CONFETTI
+       ============================================= */
+    .confetti-box { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+    .confetti-piece { position: absolute; opacity: 0; }
+    @keyframes confettiFall {
+      0% { opacity: 1; transform: translateY(-10vh) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+    }
 
-          <div class="separator" role="presentation"></div>
+    /* =============================================
+       TOAST NOTIFICATION
+       ============================================= */
+    .toast {
+      position: fixed; bottom: calc(var(--bottom-h) + 24px);
+      left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-full); padding: 12px 24px;
+      box-shadow: var(--shadow-lg); z-index: 200;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.9rem; font-weight: 500;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.vis { transform: translateX(-50%) translateY(0); }
+    .toast i { color: var(--accent); }
 
-          <section aria-labelledby="semam-title">
-            <div class="section-head">
-              <span id="semam-title" class="badge">Semam</span>
-            </div>
-            <div class="items" id="semam">
-              <div class="row" data-name="Semam" data-price="80">
-                <div class="name">
-                  Semam
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Badam Shake" data-price="100">
-                <div class="name">
-                  Badam Shake
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Oreo Shake" data-price="80">
-                <div class="name">
-                  Oreo Shake
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Cara Milk Nuts" data-price="80">
-                <div class="name">
-                  Cara Milk Nuts
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Tirtak" data-price="80">
-                <div class="name">
-                  Tirtak
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-            </div>
-          </section>
-        </section>
+    /* =============================================
+       FOOTER
+       ============================================= */
+    .footer {
+      text-align: center; padding: 40px 20px;
+      border-top: 1px solid var(--border); margin-top: 20px;
+    }
+    .footer-brand {
+      font-family: var(--font-heading); font-size: 1.3rem;
+      font-weight: 700; color: var(--primary); margin-bottom: 8px;
+    }
+    .footer-text { color: var(--text-muted); font-size: 0.85rem; }
+    .footer-hours { margin-top: 12px; font-size: 0.85rem; color: var(--text-secondary); }
+    .footer-socials { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+    .footer-socials a {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      color: var(--text-secondary); transition: all var(--transition);
+    }
+    .footer-socials a:hover { border-color: var(--primary); color: var(--primary); }
 
-        <!-- RIGHT COLUMN -->
-        <section class="card" aria-labelledby="mutton-title">
-          <div class="section-head">
-            <span id="mutton-title" class="badge">Mutton</span>
-            <div class="section-actions">
-              <button
-                class="btn sort"
-                data-target="mutton"
-                data-order="asc"
-                type="button"
-              >
-                Sort ↑ Price
-              </button>
-              <button
-                class="btn sort"
-                data-target="mutton"
-                data-order="desc"
-                type="button"
-              >
-                Sort ↓ Price
-              </button>
-            </div>
-          </div>
-          <div class="items" id="mutton">
-            <div class="row" data-name="Mutton Chops" data-price="190">
-              <div class="name">
-                Mutton Chops
-                <div class="dots"></div>
-              </div>
-              <div class="price">190</div>
-            </div>
-            <div class="row" data-name="Mutton Chukka" data-price="130">
-              <div class="name">
-                Mutton Chukka
-                <div class="dots"></div>
-              </div>
-              <div class="price">130</div>
-            </div>
-            <div class="row" data-name="Mutton Fry" data-price="120">
-              <div class="name">
-                Mutton Fry
-                <div class="dots"></div>
-              </div>
-              <div class="price">120</div>
-            </div>
-            <div class="row" data-name="Mutton Boti Fry" data-price="80">
-              <div class="name">
-                Mutton Boti Fry
-                <div class="dots"></div>
-              </div>
-              <div class="price">80</div>
-            </div>
-          </div>
+    /* =============================================
+       SKELETON LOADER
+       ============================================= */
+    .skeleton {
+      background: linear-gradient(90deg, var(--border) 25%, rgba(255,255,255,0.1) 50%, var(--border) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
-          <div class="separator" role="presentation"></div>
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 480px) {
+      .hero { min-height: 380px; padding: 80px 16px 40px; }
+      .hero h1 { font-size: 2.2rem; }
+      .nav-brand span { display: none; }
+    }
+    @media print {
+      .sticky-header, .category-tabs-wrapper, .bottom-nav,
+      .back-top, .float-order, .modal-overlay, .hero-search,
+      .hero-actions, .footer-socials, .scroll-progress,
+      .offline-banner, .update-toast { display: none !important; }
+      body { background: #fff; color: #000; padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- PWA: Offline Banner -->
+  <div class="offline-banner" id="offlineBanner">
+    <i class="fa-solid fa-wifi-slash"></i>
+    <span>You're offline - viewing cached menu</span>
+  </div>
+  <!-- PWA: Update Toast -->
+  <div class="update-toast" id="updateToast">
+    <i class="fa-solid fa-arrows-rotate"></i>
+    <span>New version available!</span>
+    <button id="updateBtn">Refresh</button>
+  </div>
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-          <section aria-labelledby="fish-title">
-            <div class="section-head">
-              <span id="fish-title" class="badge">Fish</span>
-            </div>
-            <div class="items" id="fish">
-              <div class="row" data-name="Fish Fry" data-price="100">
-                <div class="name">
-                  Fish Fry
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Fish Curry" data-price="100">
-                <div class="name">
-                  Fish Curry
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Fish 65" data-price="100">
-                <div class="name">
-                  Fish 65
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Fish Masala" data-price="120">
-                <div class="name">
-                  Fish Masala
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Chilli Fish" data-price="130">
-                <div class="name">
-                  Chilli Fish
-                  <div class="dots"></div>
-                </div>
-                <div class="price">130</div>
-              </div>
-              <div class="row" data-name="Prawns Fry" data-price="170">
-                <div class="name">
-                  Prawns Fry
-                  <div class="dots"></div>
-                </div>
-                <div class="price">170</div>
-              </div>
-              <div class="row" data-name="Prawns Masala" data-price="180">
-                <div class="name">
-                  Prawns Masala
-                  <div class="dots"></div>
-                </div>
-                <div class="price">180</div>
-              </div>
-              <div class="row" data-name="Prawns Curry" data-price="180">
-                <div class="name">
-                  Prawns Curry
-                  <div class="dots"></div>
-                </div>
-                <div class="price">180</div>
-              </div>
-              <div class="row" data-name="Chilli Prawns" data-price="180">
-                <div class="name">
-                  Chilli Prawns
-                  <div class="dots"></div>
-                </div>
-                <div class="price">180</div>
-              </div>
-            </div>
-          </section>
-
-          <div class="separator" role="presentation"></div>
-
-          <section aria-labelledby="dinner-title">
-            <div class="section-head">
-              <span id="dinner-title" class="badge">Dinner</span>
-            </div>
-            <div class="items" id="dinner">
-              <div class="row" data-name="Parotta" data-price="15">
-                <div class="name">
-                  Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">15</div>
-              </div>
-              <div class="row" data-name="Veechu Parotta" data-price="25">
-                <div class="name">
-                  Veechu Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Open Veechu Parotta" data-price="25">
-                <div class="name">
-                  Open Veechu Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Veechu Egg Parotta" data-price="70">
-                <div class="name">
-                  Veechu Egg Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">70</div>
-              </div>
-              <div class="row" data-name="Piece Parotta" data-price="25">
-                <div class="name">
-                  Piece Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Kothu Parotta" data-price="70">
-                <div class="name">
-                  Kothu Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">70</div>
-              </div>
-              <div
-                class="row"
-                data-name="Mutton Kaima Parotta"
-                data-price="180"
-              >
-                <div class="name">
-                  Mutton Kaima Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">180</div>
-              </div>
-              <div
-                class="row"
-                data-name="Chicken Kaima Parotta"
-                data-price="170"
-              >
-                <div class="name">
-                  Chicken Kaima Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">170</div>
-              </div>
-              <div
-                class="row"
-                data-name="Mutton Muttabak Parotta"
-                data-price="180"
-              >
-                <div class="name">
-                  Mutton Muttabak Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">180</div>
-              </div>
-              <div
-                class="row"
-                data-name="Chicken Muttabak Parotta"
-                data-price="170"
-              >
-                <div class="name">
-                  Chicken Muttabak Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">170</div>
-              </div>
-              <div class="row" data-name="Oil Parotta" data-price="25">
-                <div class="name">
-                  Oil Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Without Oil Parotta" data-price="20">
-                <div class="name">
-                  Without Oil Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">20</div>
-              </div>
-              <div class="row" data-name="Panchu Parotta" data-price="25">
-                <div class="name">
-                  Panchu Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">25</div>
-              </div>
-              <div class="row" data-name="Sweet Parotta" data-price="30">
-                <div class="name">
-                  Sweet Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">30</div>
-              </div>
-              <div
-                class="row"
-                data-name="Banana Leaf Mutton Parotta"
-                data-price="210"
-              >
-                <div class="name">
-                  Banana Leaf Mutton Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">210</div>
-              </div>
-              <div
-                class="row"
-                data-name="Banana Leaf Chicken Parotta"
-                data-price="170"
-              >
-                <div class="name">
-                  Banana Leaf Chicken Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">170</div>
-              </div>
-              <div class="row" data-name="Chappathi" data-price="40">
-                <div class="name">
-                  Chappathi
-                  <div class="dots"></div>
-                </div>
-                <div class="price">40</div>
-              </div>
-              <div class="row" data-name="Chicken Dum Parotta" data-price="300">
-                <div class="name">
-                  Chicken Dum Parotta
-                  <div class="dots"></div>
-                </div>
-                <div class="price">300</div>
-              </div>
-              <div class="row" data-name="Mushroom Dosa" data-price="120">
-                <div class="name">
-                  Mushroom Dosa
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Chicken Dosa" data-price="130">
-                <div class="name">
-                  Chicken Dosa
-                  <div class="dots"></div>
-                </div>
-                <div class="price">130</div>
-              </div>
-              <div class="row" data-name="Mutton Dosa" data-price="160">
-                <div class="name">
-                  Mutton Dosa
-                  <div class="dots"></div>
-                </div>
-                <div class="price">160</div>
-              </div>
-            </div>
-          </section>
-
-          <div class="separator" role="presentation"></div>
-
-          <section aria-labelledby="chinese-title">
-            <div class="section-head">
-              <span id="chinese-title" class="badge">Chinese</span>
-            </div>
-            <div class="items" id="chinese">
-              <div class="row" data-name="Veg Manchurian" data-price="100">
-                <div class="name">
-                  Veg Manchurian
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Gobi Manchurian" data-price="90">
-                <div class="name">
-                  Gobi Manchurian
-                  <div class="dots"></div>
-                </div>
-                <div class="price">90</div>
-              </div>
-              <div
-                class="row"
-                data-name="Chilli Gobi Manchurian"
-                data-price="90"
-              >
-                <div class="name">
-                  Chilli Gobi Manchurian
-                  <div class="dots"></div>
-                </div>
-                <div class="price">90</div>
-              </div>
-              <div class="row" data-name="Mushroom Gravy" data-price="120">
-                <div class="name">
-                  Mushroom Gravy
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Mushroom Manchurian" data-price="120">
-                <div class="name">
-                  Mushroom Manchurian
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Crispy Veg" data-price="120">
-                <div class="name">
-                  Crispy Veg
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Schezwan Chicken" data-price="150">
-                <div class="name">
-                  Schezwan Chicken
-                  <div class="dots"></div>
-                </div>
-                <div class="price">150</div>
-              </div>
-              <div class="row" data-name="Chilli Chicken" data-price="120">
-                <div class="name">
-                  Chilli Chicken
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Ginger Chicken" data-price="140">
-                <div class="name">
-                  Ginger Chicken
-                  <div class="dots"></div>
-                </div>
-                <div class="price">140</div>
-              </div>
-              <div class="row" data-name="Dragon Chicken" data-price="150">
-                <div class="name">
-                  Dragon Chicken
-                  <div class="dots"></div>
-                </div>
-                <div class="price">150</div>
-              </div>
-              <div class="row" data-name="Shawarma Roll" data-price="80">
-                <div class="name">
-                  Shawarma Roll
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Shawarma Plate" data-price="110">
-                <div class="name">
-                  Shawarma Plate
-                  <div class="dots"></div>
-                </div>
-                <div class="price">110</div>
-              </div>
-            </div>
-          </section>
-
-          <div class="separator" role="presentation"></div>
-
-          <section aria-labelledby="fried-title">
-            <div class="section-head">
-              <span id="fried-title" class="badge">Fried Rice</span>
-            </div>
-            <div class="items" id="fried">
-              <div class="row" data-name="Veg Fried Rice" data-price="80">
-                <div class="name">
-                  Veg Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Egg Fried Rice" data-price="90">
-                <div class="name">
-                  Egg Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">90</div>
-              </div>
-              <div class="row" data-name="Chicken Fried Rice" data-price="120">
-                <div class="name">
-                  Chicken Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">120</div>
-              </div>
-              <div class="row" data-name="Mushroom Fried Rice" data-price="100">
-                <div class="name">
-                  Mushroom Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div class="row" data-name="Paneer Fried Rice" data-price="110">
-                <div class="name">
-                  Paneer Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">110</div>
-              </div>
-              <div class="row" data-name="Mixed Fried Rice" data-price="140">
-                <div class="name">
-                  Mixed Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">140</div>
-              </div>
-              <div
-                class="row"
-                data-name="Schezwan Chicken Fried Rice"
-                data-price="140"
-              >
-                <div class="name">
-                  Schezwan Chicken Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">140</div>
-              </div>
-              <div
-                class="row"
-                data-name="Schezwan Veg Fried Rice"
-                data-price="100"
-              >
-                <div class="name">
-                  Schezwan Veg Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-              <div
-                class="row"
-                data-name="Taiwanese Chicken Fried Rice"
-                data-price="130"
-              >
-                <div class="name">
-                  Taiwanese Chicken Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">130</div>
-              </div>
-              <div
-                class="row"
-                data-name="Taiwanese Veg Fried Rice"
-                data-price="110"
-              >
-                <div class="name">
-                  Taiwanese Veg Fried Rice
-                  <div class="dots"></div>
-                </div>
-                <div class="price">110</div>
-              </div>
-            </div>
-          </section>
-
-          <div class="separator" role="presentation"></div>
-
-          <section aria-labelledby="noodles-title">
-            <div class="section-head">
-              <span id="noodles-title" class="badge">Noodles</span>
-            </div>
-            <div class="items" id="noodles">
-              <div class="row" data-name="Chicken Noodles" data-price="110">
-                <div class="name">
-                  Chicken Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">110</div>
-              </div>
-              <div class="row" data-name="Veg Noodles" data-price="80">
-                <div class="name">
-                  Veg Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div class="row" data-name="Egg Noodles" data-price="90">
-                <div class="name">
-                  Egg Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">90</div>
-              </div>
-              <div class="row" data-name="Mixed Noodles" data-price="130">
-                <div class="name">
-                  Mixed Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">130</div>
-              </div>
-              <div
-                class="row"
-                data-name="Schezwan Chicken Noodles"
-                data-price="140"
-              >
-                <div class="name">
-                  Schezwan Chicken Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">140</div>
-              </div>
-              <div
-                class="row"
-                data-name="Schezwan Veg Noodles"
-                data-price="110"
-              >
-                <div class="name">
-                  Schezwan Veg Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">110</div>
-              </div>
-              <div
-                class="row"
-                data-name="Taiwanese Chicken Noodles"
-                data-price="140"
-              >
-                <div class="name">
-                  Taiwanese Chicken Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">140</div>
-              </div>
-              <div
-                class="row"
-                data-name="Taiwanese Veg Noodles"
-                data-price="100"
-              >
-                <div class="name">
-                  Taiwanese Veg Noodles
-                  <div class="dots"></div>
-                </div>
-                <div class="price">100</div>
-              </div>
-            </div>
-          </section>
-
-          <div class="separator" role="presentation"></div>
-
-          <section aria-labelledby="idiyappam-title">
-            <div class="section-head">
-              <span id="idiyappam-title" class="badge">Idiyappam / Paya</span>
-            </div>
-            <div class="items" id="idiyappam">
-              <div class="row" data-name="Idiyappam / Paya" data-price="80">
-                <div class="name">
-                  Idiyappam / Paya
-                  <div class="dots"></div>
-                </div>
-                <div class="price">80</div>
-              </div>
-              <div
-                class="row"
-                data-name="Appam / Chicken Gravy"
-                data-price="135"
-              >
-                <div class="name">
-                  Appam / Chicken Gravy
-                  <div class="dots"></div>
-                </div>
-                <div class="price">135</div>
-              </div>
-            </div>
-          </section>
-        </section>
-      </main>
-
-      <section class="card" aria-labelledby="gallery-title">
-        <div class="section-head">
-          <span id="gallery-title" class="badge">Popular Dishes</span>
-        </div>
-        <div class="gallery" role="list">
-          <figure role="listitem">
-            <img
-              src="https://images.pexels.com/photos/1108117/pexels-photo-1108117.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Cold coffee with ice cream"
-            />
-            <figcaption>Cold Coffee</figcaption>
-          </figure>
-          <figure role="listitem">
-            <img
-              src="https://images.pexels.com/photos/1482803/pexels-photo-1482803.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Falooda dessert in tall glass"
-            />
-            <figcaption>Falooda</figcaption>
-          </figure>
-          <figure role="listitem">
-            <img
-              src="https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Fish fry served on plate"
-            />
-            <figcaption>Fish Fry</figcaption>
-          </figure>
-          <figure role="listitem">
-            <img
-              src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Noodles in a bowl"
-            />
-            <figcaption>Noodles</figcaption>
-          </figure>
-          <figure role="listitem">
-            <img
-              src="https://images.pexels.com/photos/103566/pexels-photo-103566.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Scoops of ice cream"
-            />
-            <figcaption>Ice Cream</figcaption>
-          </figure>
-        </div>
-      </section>
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><i class="fa-solid fa-fire"></i> #1 Restaurant in Town</div>
+      <h1>Welcome to <span>Flavors</span></h1>
+      <p class="hero-tagline">Authentic tastes, modern vibes. Explore 100+ dishes crafted with passion.</p>
+      <div class="hero-search">
+        <i class="fa-solid fa-magnifying-glass si"></i>
+        <input type="search" id="searchInput" placeholder="Search pizza, burger, karahi..." autocomplete="off" aria-label="Search menu" />
+        <button class="cs" id="clearSearch" aria-label="Clear"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-hero pri" id="randomBtn"><i class="fa-solid fa-shuffle"></i> Surprise Me</button>
+        <button class="btn-hero sec" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-utensils"></i> View Menu</button>
+        <button class="btn-hero sec install-banner" id="installBtn"><i class="fa-solid fa-download"></i> Install App</button>
+      </div>
     </div>
+  </section>
 
-    <script>
-      // Accessibility helpers
-      const qs = (s, el = document) => el.querySelector(s);
-      const qsa = (s, el = document) => [...el.querySelectorAll(s)];
+  <!-- STICKY HEADER -->
+  <header class="sticky-header" id="stickyHeader">
+    <div class="nav-c">
+      <div class="nav-brand"><i class="fa-solid fa-utensils"></i> <span>Flavors</span></div>
+      <div class="nav-controls">
+        <button class="nav-btn" id="cartBtn" title="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="bc" id="cartCount">0</span>
+          <span class="nd" id="netDot" title="Online"></span>
+        </button>
+        <button class="theme-btn" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+      </div>
+    </div>
+  </header>
 
-      // Global Search
-      const searchInput = qs("#search");
-      const clearBtn = qs("#clear");
+  <!-- CATEGORY TABS -->
+  <div class="category-tabs-wrapper">
+    <div class="category-tabs" id="catTabs"></div>
+  </div>
 
-      const filterMenu = () => {
-        const term = searchInput.value.trim().toLowerCase();
-        qsa(".row").forEach((row) => {
-          const name = row.dataset.name.toLowerCase();
-          row.style.display = name.includes(term) ? "" : "none";
-        });
-      };
-      searchInput.addEventListener("input", filterMenu);
-      clearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        filterMenu();
-        searchInput.focus();
-      });
+  <!-- MAIN -->
+  <main class="main-content" id="menu">
+    <div id="menuContainer"></div>
+    <div class="no-results" id="noResults"><i class="fa-solid fa-face-sad-tear"></i><h3>No items found</h3><p>Try a different search term!</p></div>
+  </main>
 
-      // Sorting within sections by price
-      const sortButtons = qsa(".sort");
-      sortButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const target = qs("#" + btn.dataset.target);
-          const rows = qsa(".row", target);
-          const order = btn.dataset.order === "asc" ? 1 : -1;
-          rows
-            .sort(
-              (a, b) =>
-                (parseFloat(a.dataset.price) - parseFloat(b.dataset.price)) *
-                order
-            )
-            .forEach((r) => target.appendChild(r));
-        });
-      });
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">Flavors Restaurant</div>
+    <p class="footer-text">Authentic flavors served with love</p>
+    <p class="footer-hours"><i class="fa-solid fa-clock"></i> Open Daily: 11:00 AM - 11:00 PM</p>
+    <div class="footer-socials">
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+  </footer>
 
-      // Toggle currency symbol (useful if prices are unit-less)
-      qs("#toggle-currency").addEventListener("click", () => {
-        const has = getComputedStyle(document.documentElement)
-          .getPropertyValue("--currency")
-          .trim();
-        document.documentElement.style.setProperty(
-          "--currency",
-          has ? "''" : "'\\20B9'"
+  <!-- BACK TO TOP -->
+  <button class="back-top" id="backTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- FLOATING ORDER -->
+  <button class="float-order" id="floatOrder"><i class="fa-solid fa-phone"></i> Order Now</button>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav">
+    <div class="bottom-nav-inner">
+      <button class="bn-item active" data-s="hero"><i class="fa-solid fa-house"></i><span>Home</span></button>
+      <button class="bn-item" data-s="menu"><i class="fa-solid fa-utensils"></i><span>Menu</span></button>
+      <button class="bn-item" onclick="document.getElementById('randomBtn').click()"><i class="fa-solid fa-shuffle"></i><span>Surprise</span></button>
+      <button class="bn-item" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})"><i class="fa-solid fa-circle-info"></i><span>About</span></button>
+    </div>
+  </nav>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-img-wrap" id="modalImgWrap">
+        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+        <span id="modalEmoji" style="font-size:5rem"></span>
+        <img id="modalImg" style="display:none;width:100%;height:100%;object-fit:cover" />
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-name" id="modalName"></h2>
+        <p class="modal-cat" id="modalCat"></p>
+        <div class="modal-badges" id="modalBadges"></div>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-actions">
+          <button class="modal-btn close-m" id="modalCloseBtn">Close</button>
+          <button class="modal-btn order" id="modalOrderBtn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"><i class="fa-solid fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+  <!-- CONFETTI -->
+  <div class="confetti-box" id="confettiBox"></div>
+
+  <script>
+    /* =============================================
+       MENU DATA - 120+ items across all categories
+       ============================================= */
+    const menuData = [
+      // ── PIZZAS ──
+      { id: 1, name: "Margherita Pizza", price: 8.99, category: "Pizzas", emoji: "🍕", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Classic tomato sauce, fresh mozzarella, and basil on a crispy thin crust." },
+      { id: 2, name: "Pepperoni Pizza", price: 10.99, category: "Pizzas", emoji: "🍕", image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Loaded with spicy pepperoni slices and melted mozzarella cheese." },
+      { id: 3, name: "BBQ Chicken Pizza", price: 11.99, category: "Pizzas", emoji: "🍕", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Smoky BBQ sauce, grilled chicken, red onions, and cilantro." },
+      { id: 4, name: "Vegetarian Supreme", price: 9.99, category: "Pizzas", emoji: "🍕", image: "https://images.unsplash.com/photo-1511689660979-10d2b1aada4d?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Bell peppers, mushrooms, olives, onions, and tomatoes on tomato sauce." },
+      { id: 5, name: "Spicy Mexican Pizza", price: 12.99, category: "Pizzas", emoji: "🌶️", image: "https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: false, description: "Jalapeños, seasoned beef, corn, beans, and spicy sauce." },
+      { id: 6, name: "Cheese Lover's Pizza", price: 9.49, category: "Pizzas", emoji: "🧀", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Four cheese blend with mozzarella, cheddar, parmesan, and gouda." },
+      { id: 7, name: "Hawaiian Pizza", price: 10.49, category: "Pizzas", emoji: "🍍", image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Sweet pineapple chunks and ham on a tangy tomato base." },
+      { id: 8, name: "Loaded Meat Pizza", price: 13.99, category: "Pizzas", emoji: "🥩", image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Pepperoni, sausage, bacon, and ground beef with extra cheese." },
+
+      // ── BURGERS ──
+      { id: 9, name: "Classic Beef Burger", price: 7.99, category: "Burgers", emoji: "🍔", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Juicy beef patty with lettuce, tomato, onion, and special sauce." },
+      { id: 10, name: "Cheeseburger Deluxe", price: 8.99, category: "Burgers", emoji: "🍔", image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Double cheese, crispy bacon, pickles, and our signature mayo." },
+      { id: 11, name: "Chicken Crispy Burger", price: 8.49, category: "Burgers", emoji: "🍗", image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Crispy fried chicken breast with coleslaw and spicy mayo." },
+      { id: 12, name: "Double Patty Burger", price: 10.99, category: "Burgers", emoji: "🍔", image: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Two thick beef patties, triple cheese, caramelized onions." },
+      { id: 13, name: "Mushroom Swiss Burger", price: 9.49, category: "Burgers", emoji: "🍄", image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: false, description: "Sautéed mushrooms and melted Swiss cheese on a beef patty." },
+      { id: 14, name: "BBQ Bacon Burger", price: 9.99, category: "Burgers", emoji: "🥓", image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Smoky BBQ sauce, crispy bacon, onion rings, and cheddar." },
+      { id: 15, name: "Veggie Supreme Burger", price: 7.49, category: "Burgers", emoji: "🥬", image: "https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Plant-based patty with avocado, sprouts, and herb mayo." },
+      { id: 16, name: "Spicy Jalapeño Burger", price: 8.99, category: "Burgers", emoji: "🌶️", image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: false, description: "Jalapeño cream cheese, pepper jack, and spicy sriracha mayo." },
+
+      // ── FAST FOOD ──
+      { id: 17, name: "Chicken Wings (6 pcs)", price: 6.99, category: "Fast Food", emoji: "🍗", image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Crispy fried wings tossed in your choice of buffalo or BBQ sauce." },
+      { id: 18, name: "Chicken Nuggets (8 pcs)", price: 5.99, category: "Fast Food", emoji: "🐔", image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Golden crispy nuggets served with honey mustard and ketchup." },
+      { id: 19, name: "French Fries (Large)", price: 3.99, category: "Fast Food", emoji: "🍟", image: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Crispy golden fries seasoned with our secret spice blend." },
+      { id: 20, name: "Cheese Fries", price: 4.99, category: "Fast Food", emoji: "🧀", image: "https://images.unsplash.com/photo-1585109632996-775c13bde7f0?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Hot fries drizzled with melted cheddar and jalapeño sauce." },
+      { id: 21, name: "Onion Rings", price: 4.49, category: "Fast Food", emoji: "🧅", image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Thick-cut onion rings in a crispy beer batter." },
+      { id: 22, name: "Mozzarella Sticks", price: 5.49, category: "Fast Food", emoji: "🧀", image: "https://images.unsplash.com/photo-1531749668029-2db88e4f769d?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: true, description: "Golden fried mozzarella sticks with marinara dipping sauce." },
+      { id: 23, name: "Chicken Tenders (3 pcs)", price: 6.49, category: "Fast Food", emoji: "🍗", image: "https://images.unsplash.com/photo-1562967916-eb82221dfb92?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Tender chicken strips in a seasoned crispy coating." },
+
+      // ── KARAHI DISHES ──
+      { id: 24, name: "Chicken Karahi", price: 12.99, category: "Karahi", emoji: "🥘", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Traditional Pakistani chicken curry slow-cooked in a wok with fresh tomatoes, green chilies, and ginger." },
+      { id: 25, name: "Mutton Karahi", price: 15.99, category: "Karahi", emoji: "🥘", image: "https://images.unsplash.com/photo-1545247181-516773cae754?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Tender mutton pieces in a rich, aromatic tomato-based gravy." },
+      { id: 26, name: "White Chicken Karahi", price: 13.99, category: "Karahi", emoji: "🥘", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Creamy white gravy with chicken, yogurt, and mild spices." },
+      { id: 27, name: "White Mutton Karahi", price: 16.99, category: "Karahi", emoji: "🥘", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Succulent mutton in a rich white cream and yogurt sauce." },
+      { id: 28, name: "Butter Chicken Karahi", price: 13.49, category: "Karahi", emoji: "🧈", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Tender chicken in a velvety tomato-butter sauce with aromatic spices." },
+      { id: 29, name: "Garlic Karahi", price: 12.49, category: "Karahi", emoji: "🧄", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: false, description: "Bold garlic-infused karahi with tender chicken and green chilies." },
+      { id: 30, name: "Handi Karahi", price: 14.99, category: "Karahi", emoji: "🫕", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Slow-cooked handi style with cream, butter, and secret spices." },
+      { id: 31, name: "Special Chef Karahi", price: 17.99, category: "Karahi", emoji: "👨‍🍳", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&h=300&fit=crop", isPopular: true, isNew: true, isVegetarian: false, description: "Chef's special recipe with premium cuts, truffle oil, and exotic spices." },
+
+      // ── BIRYANI & RICE ──
+      { id: 32, name: "Chicken Biryani", price: 10.99, category: "Biryani & Rice", emoji: "🍚", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Fragrant basmati rice layered with spiced chicken, saffron, and caramelized onions." },
+      { id: 33, name: "Mutton Biryani", price: 13.99, category: "Biryani & Rice", emoji: "🍚", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Aromatic rice with tender mutton, whole spices, and saffron strands." },
+      { id: 34, name: "Vegetable Biryani", price: 8.99, category: "Biryani & Rice", emoji: "🥬", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Garden vegetables cooked with basmati rice and aromatic spices." },
+      { id: 35, name: "Chicken Fried Rice", price: 9.99, category: "Biryani & Rice", emoji: "🍳", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Wok-fried rice with chicken, eggs, vegetables, and soy sauce." },
+      { id: 36, name: "Prawn Biryani", price: 14.99, category: "Biryani & Rice", emoji: "🦐", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: false, description: "Premium prawn biryani with saffron rice and coastal spices." },
+
+      // ── DRINKS & BEVERAGES ──
+      { id: 37, name: "Fresh Lemonade", price: 3.99, category: "Drinks", emoji: "🍋", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Freshly squeezed lemonade with a hint of mint." },
+      { id: 38, name: "Mango Juice", price: 4.49, category: "Drinks", emoji: "🥭", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Pure mango pulp blended to smooth perfection." },
+      { id: 39, name: "Watermelon Juice", price: 4.49, category: "Drinks", emoji: "🍉", image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Refreshing watermelon juice served chilled with ice." },
+      { id: 40, name: "Strawberry Shake", price: 5.99, category: "Drinks", emoji: "🍓", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Creamy strawberry milkshake topped with whipped cream." },
+      { id: 41, name: "Chocolate Shake", price: 5.99, category: "Drinks", emoji: "🍫", image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Rich chocolate milkshake with cocoa and vanilla ice cream." },
+      { id: 42, name: "Iced Tea", price: 3.49, category: "Drinks", emoji: "🧊", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Chilled black tea with lemon and a touch of honey." },
+      { id: 43, name: "Cold Coffee", price: 4.99, category: "Drinks", emoji: "☕", image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Iced coffee blended with milk and topped with cocoa powder." },
+      { id: 44, name: "Mint Mojito", price: 4.49, category: "Drinks", emoji: "🌿", image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: true, description: "Fresh mint, lime, soda water, and a splash of lime juice." },
+      { id: 45, name: "Fruit Punch", price: 4.99, category: "Drinks", emoji: "🍹", image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Tropical blend of pineapple, orange, and cranberry juices." },
+      { id: 46, name: "Fresh Orange Juice", price: 3.99, category: "Drinks", emoji: "🍊", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Freshly squeezed orange juice, no added sugar." },
+
+      // ── APPETIZERS ──
+      { id: 47, name: "Spring Rolls", price: 5.99, category: "Appetizers", emoji: "🥟", image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Crispy vegetable spring rolls served with sweet chili sauce." },
+      { id: 48, name: "Samosas (4 pcs)", price: 4.99, category: "Appetizers", emoji: "🥟", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Crispy pastry triangles filled with spiced potatoes and peas." },
+      { id: 49, name: "Chicken Tikka", price: 8.99, category: "Appetizers", emoji: "🍢", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Smoky grilled chicken pieces marinated in yogurt and spices." },
+      { id: 50, name: "Seekh Kebab", price: 7.99, category: "Appetizers", emoji: "🍢", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Minced lamb kebabs grilled on skewers with herbs and spices." },
+      { id: 51, name: "Garlic Bread", price: 4.49, category: "Appetizers", emoji: "🍞", image: "https://images.unsplash.com/photo-1619535860434-ba1d8fa12536?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Toasted bread with garlic butter, herbs, and melted cheese." },
+
+      // ── DESSERTS ──
+      { id: 52, name: "Chocolate Brownie", price: 4.99, category: "Desserts", emoji: "🍫", image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Warm chocolate brownie served with vanilla ice cream." },
+      { id: 53, name: "Cheesecake", price: 5.99, category: "Desserts", emoji: "🍰", image: "https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Creamy New York-style cheesecake with berry compote." },
+      { id: 54, name: "Ice Cream Sundae", price: 6.49, category: "Desserts", emoji: "🍨", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Three scoops with hot fudge, whipped cream, and a cherry." },
+      { id: 55, name: "Gulab Jamun", price: 3.99, category: "Desserts", emoji: "🟤", image: "https://images.unsplash.com/photo-1666190099879-b07e6c412de5?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Soft milk dumplings soaked in rose-flavored sugar syrup." },
+      { id: 56, name: "Fruit Custard", price: 4.49, category: "Desserts", emoji: "🍮", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop", isPopular: false, isNew: true, isVegetarian: true, description: "Creamy vanilla custard loaded with fresh seasonal fruits." },
+
+      // ── ORIGINAL CATEGORIES (trimmed best sellers) ──
+      // Milkshakes & Ice Cream
+      { id: 57, name: "Vanilla Shake", price: 4.99, category: "Milkshakes", emoji: "🍦", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Classic creamy vanilla milkshake blended to perfection." },
+      { id: 58, name: "Mango Shake", price: 5.49, category: "Milkshakes", emoji: "🥭", image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Fresh Alphonso mango shake with a tropical twist." },
+      { id: 59, name: "Oreo Shake", price: 5.49, category: "Milkshakes", emoji: "🍪", image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Creamy Oreo cookie shake blended with vanilla ice cream." },
+      { id: 60, name: "Pista Shake", price: 5.49, category: "Milkshakes", emoji: "🥜", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Nutty pistachio-flavored creamy shake." },
+      { id: 61, name: "Butterscotch Shake", price: 5.49, category: "Milkshakes", emoji: "🍨", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Sweet butterscotch shake with a caramel twist." },
+      { id: 62, name: "Black Currant Shake", price: 5.49, category: "Milkshakes", emoji: "🫐", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Tangy and sweet black currant shake." },
+      { id: 63, name: "Tender Coconut Shake", price: 5.49, category: "Milkshakes", emoji: "🥥", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Cool and refreshing tender coconut shake." },
+      { id: 64, name: "Badam Shake", price: 5.99, category: "Milkshakes", emoji: "🥜", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Premium almond shake rich in protein and flavor." },
+
+      // Falooda
+      { id: 65, name: "Royal Falooda", price: 7.99, category: "Falooda", emoji: "🥤", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Vermicelli, basil seeds, rose syrup, and ice cream layered beautifully." },
+      { id: 66, name: "Pista Falooda", price: 8.49, category: "Falooda", emoji: "🥜", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Pistachio-flavored falooda topped with crushed nuts." },
+      { id: 67, name: "MGS Special Falooda", price: 9.99, category: "Falooda", emoji: "⭐", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop", isPopular: true, isNew: true, isVegetarian: true, description: "Our signature falooda with exclusive ingredients and premium toppings." },
+
+      // Fresh Limes
+      { id: 68, name: "Fresh Lime", price: 2.99, category: "Fresh Limes", emoji: "🍋", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Freshly squeezed lime juice, perfectly tangy." },
+      { id: 69, name: "Mint Lime", price: 3.49, category: "Fresh Limes", emoji: "🌿", image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Refreshing lime juice infused with fresh mint leaves." },
+      { id: 70, name: "Ginger Lime", price: 2.99, category: "Fresh Limes", emoji: "🫚", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Zesty lime juice with a kick of fresh ginger." },
+      { id: 71, name: "Soda Lime", price: 3.29, category: "Fresh Limes", emoji: "🫧", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Sparkling lime soda for a fizzy refreshment." },
+      { id: 72, name: "Grapes Lime", price: 3.49, category: "Fresh Limes", emoji: "🍇", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Sweet grape juice blended with tangy lime." },
+
+      // Dinner / Parotta
+      { id: 73, name: "Parotta", price: 1.99, category: "Dinner", emoji: "🫓", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Flaky, layered South Indian parotta freshly made." },
+      { id: 74, name: "Kothu Parotta", price: 8.99, category: "Dinner", emoji: "🫓", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Shredded parotta stir-fried with spicy masala and eggs." },
+      { id: 75, name: "Mutton Kaima Parotta", price: 10.99, category: "Dinner", emoji: "🍖", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Parotta stuffed with minced mutton kaima, a royal treat." },
+      { id: 76, name: "Chicken Dum Parotta", price: 12.99, category: "Dinner", emoji: "🍗", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop", isPopular: true, isNew: true, isVegetarian: false, description: "Premium chicken dum parotta slow-cooked to perfection." },
+      { id: 77, name: "Fish Fry", price: 9.99, category: "Dinner", emoji: "🐟", image: "https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Golden crispy fish fry marinated in coastal spices." },
+      { id: 78, name: "Chicken 65", price: 8.99, category: "Dinner", emoji: "🍗", image: "https://images.unsplash.com/photo-1608039829572-9b5bba69f34f?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Spicy deep-fried chicken bites, a South Indian classic." },
+
+      // Chinese
+      { id: 79, name: "Chilli Chicken", price: 9.99, category: "Chinese", emoji: "🌶️", image: "https://images.unsplash.com/photo-1608039829572-9b5bba69f34f?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Classic Indo-Chinese chilli chicken with peppers and onions." },
+      { id: 80, name: "Dragon Chicken", price: 10.99, category: "Chinese", emoji: "🐉", image: "https://images.unsplash.com/photo-1608039829572-9b5bba69f34f?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Bold and spicy dragon chicken with a fiery red sauce." },
+      { id: 81, name: "Gobi Manchurian", price: 7.99, category: "Chinese", emoji: "🥦", image: "https://images.unsplash.com/photo-1567337710282-00832b415979?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: true, description: "Crispy cauliflower florets tossed in spicy Manchurian sauce." },
+      { id: 82, name: "Shawarma Roll", price: 6.99, category: "Chinese", emoji: "🌯", image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Juicy chicken shawarma wrapped in warm pita bread." },
+      { id: 83, name: "Veg Manchurian", price: 7.99, category: "Chinese", emoji: "🥬", image: "https://images.unsplash.com/photo-1567337710282-00832b415979?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Crispy vegetable balls in a tangy Manchurian sauce." },
+
+      // Fried Rice & Noodles
+      { id: 84, name: "Chicken Fried Rice", price: 8.99, category: "Rice & Noodles", emoji: "🍚", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop", isPopular: true, isNew: false, isVegetarian: false, description: "Wok-tossed rice with tender chicken and vegetables." },
+      { id: 85, name: "Schezwan Fried Rice", price: 8.49, category: "Rice & Noodles", emoji: "🌶️", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Spicy Schezwan fried rice with bold flavors." },
+      { id: 86, name: "Chicken Noodles", price: 8.49, category: "Rice & Noodles", emoji: "🍜", image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Stir-fried noodles with tender chicken and vegetables." },
+      { id: 87, name: "Veg Noodles", price: 6.99, category: "Rice & Noodles", emoji: "🥢", image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: true, description: "Classic vegetable noodles tossed in soy sauce." },
+      { id: 88, name: "Mixed Noodles", price: 9.49, category: "Rice & Noodles", emoji: "🍜", image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop", isPopular: false, isNew: false, isVegetarian: false, description: "Noodles loaded with chicken, egg, and mixed vegetables." }
+    ];
+
+    /* =============================================
+       CATEGORY CONFIG
+       ============================================= */
+    const catConfig = {
+      "Pizzas": { icon: "fa-solid fa-pizza-slice", emoji: "🍕" },
+      "Burgers": { icon: "fa-solid fa-burger", emoji: "🍔" },
+      "Fast Food": { icon: "fa-solid fa-fire-flame-curved", emoji: "🍗" },
+      "Karahi": { icon: "fa-solid fa-fire-burner", emoji: "🥘" },
+      "Biryani & Rice": { icon: "fa-solid fa-bowl-rice", emoji: "🍚" },
+      "Drinks": { icon: "fa-solid fa-mug-hot", emoji: "🥤" },
+      "Appetizers": { icon: "fa-solid fa-plate-wheat", emoji: "🥟" },
+      "Desserts": { icon: "fa-solid fa-ice-cream", emoji: "🍰" },
+      "Milkshakes": { icon: "fa-solid fa-blender", emoji: "🍦" },
+      "Falooda": { icon: "fa-solid fa-glass-water", emoji: "🥤" },
+      "Fresh Limes": { icon: "fa-solid fa-lemon", emoji: "🍋" },
+      "Dinner": { icon: "fa-solid fa-utensils", emoji: "🍽️" },
+      "Chinese": { icon: "fa-solid fa-bowl-rice", emoji: "🥡" },
+      "Rice & Noodles": { icon: "fa-solid fa-bowl-food", emoji: "🍜" }
+    };
+
+    /* =============================================
+       STATE
+       ============================================= */
+    let currentTheme = localStorage.getItem('flavors-theme') || 'light';
+    let cartCount = 0;
+    let activeCategory = 'All';
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+
+    /* =============================================
+       THEME
+       ============================================= */
+    function initTheme() {
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      $('#themeIcon').className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('flavors-theme', currentTheme);
+      $('#themeIcon').className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    /* =============================================
+       HERO PARTICLES
+       ============================================= */
+    function createParticles() {
+      const c = $('#heroParticles');
+      for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.className = 'hero-particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 8 + 's';
+        p.style.animationDuration = (6 + Math.random() * 6) + 's';
+        p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+        c.appendChild(p);
+      }
+    }
+
+    /* =============================================
+       BUILD CATEGORY TABS
+       ============================================= */
+    function buildTabs() {
+      const cats = ['All', ...new Set(menuData.map(i => i.category))];
+      $('#catTabs').innerHTML = cats.map(c => {
+        const n = c === 'All' ? menuData.length : menuData.filter(i => i.category === c).length;
+        const cfg = catConfig[c];
+        const label = c === 'All' ? '🍽️ All' : `${cfg ? cfg.emoji : ''} ${c}`;
+        return `<button class="cat-tab${c === activeCategory ? ' active' : ''}" data-cat="${c}">${label} <span class="cnt">${n}</span></button>`;
+      }).join('');
+    }
+
+    /* =============================================
+       RENDER MENU
+       ============================================= */
+    function renderMenu(filter = 'All', search = '') {
+      const cats = [...new Set(menuData.map(i => i.category))];
+      let html = '', total = 0;
+
+      cats.forEach(cat => {
+        if (filter !== 'All' && cat !== filter) return;
+        let items = menuData.filter(i => i.category === cat);
+        if (search) items = items.filter(i =>
+          i.name.toLowerCase().includes(search) ||
+          i.description.toLowerCase().includes(search) ||
+          i.category.toLowerCase().includes(search)
         );
+        if (!items.length) return;
+        total += items.length;
+        const cfg = catConfig[cat] || { icon: 'fa-solid fa-utensils', emoji: '🍽️' };
+
+        html += `
+          <section class="menu-section" data-cat="${cat}">
+            <div class="sec-header">
+              <div class="sec-icon"><i class="${cfg.icon}"></i></div>
+              <div class="sec-title-group">
+                <h2 class="sec-title">${cat}</h2>
+                <p class="sec-sub">${items.length} item${items.length > 1 ? 's' : ''}</p>
+              </div>
+              <span class="sec-count">${items.length}</span>
+            </div>
+            <div class="menu-grid">
+              ${items.map(i => cardHTML(i)).join('')}
+            </div>
+          </section>`;
       });
 
-      // Hover highlight via keyboard focus
-      qsa(".row").forEach((r) => {
-        r.tabIndex = 0;
-      });
+      $('#menuContainer').innerHTML = html;
+      $('#noResults').classList.toggle('vis', total === 0);
+      observeSections();
+    }
 
-      // Initial console log
-      console.log(
-        "%c Menu loaded successfully ",
-        "padding:4px 8px; background:#ff9933; color:#111; border-radius:6px"
-      );
-    </script>
-  </body>
+    function cardHTML(item) {
+      const b = [];
+      if (item.isPopular) b.push('<span class="card-badge badge-pop">Popular</span>');
+      if (item.isNew) b.push('<span class="card-badge badge-new">New</span>');
+      if (item.isVegetarian) b.push('<span class="card-badge badge-veg">Veg</span>');
+      const rating = (4 + Math.random()).toFixed(1);
+
+      return `
+        <div class="menu-card" data-id="${item.id}" onclick="openModal(${item.id})" tabindex="0" role="button" aria-label="${item.name}, $${item.price}">
+          <div class="card-img-wrap">
+            <img data-src="${item.image}" alt="${item.name}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.classList.add('err')" />
+            <div class="emoji-fallback">${item.emoji}</div>
+            <div class="card-badges">${b.join('')}</div>
+            <button class="card-quick-add" onclick="event.stopPropagation();quickAdd(${item.id})" aria-label="Add to cart"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="card-body">
+            <div class="card-name">${item.name}</div>
+            <p class="card-desc">${item.description}</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">${item.price.toFixed(2)}</span>
+            <span class="card-rating"><i class="fa-solid fa-star"></i> ${rating}</span>
+          </div>
+        </div>`;
+    }
+
+    /* =============================================
+       INTERSECTION OBSERVER
+       ============================================= */
+    function observeSections() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      $$('.menu-section').forEach(s => obs.observe(s));
+    }
+
+    /* =============================================
+       LAZY LOAD IMAGES
+       ============================================= */
+    function lazyLoadImages() {
+      const imgs = $$('img[data-src]');
+      const imgObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.src = e.target.dataset.src;
+            imgObs.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '200px' });
+      imgs.forEach(i => imgObs.observe(i));
+    }
+
+    /* =============================================
+       SEARCH
+       ============================================= */
+    let searchTimer;
+    function handleSearch() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        const term = $('#searchInput').value.trim().toLowerCase();
+        $('#clearSearch').classList.toggle('vis', term.length > 0);
+        renderMenu(activeCategory, term);
+        lazyLoadImages();
+      }, 200);
+    }
+    function clearSearch() {
+      $('#searchInput').value = '';
+      $('#clearSearch').classList.remove('vis');
+      renderMenu(activeCategory, '');
+      lazyLoadImages();
+      $('#searchInput').focus();
+    }
+
+    /* =============================================
+       CATEGORY FILTER
+       ============================================= */
+    function filterCat(cat) {
+      activeCategory = cat;
+      $$('.cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+      const term = $('#searchInput').value.trim().toLowerCase();
+      renderMenu(cat, term);
+      lazyLoadImages();
+      if (cat !== 'All') {
+        const sec = document.querySelector(`.menu-section[data-cat="${cat}"]`);
+        if (sec) setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }
+    }
+
+    /* =============================================
+       MODAL
+       ============================================= */
+    function openModal(id) {
+      const item = menuData.find(i => i.id === id);
+      if (!item) return;
+      $('#modalEmoji').textContent = item.emoji;
+      $('#modalName').textContent = item.name;
+      $('#modalCat').textContent = item.category;
+      $('#modalDesc').textContent = item.description;
+      $('#modalPrice').textContent = item.price.toFixed(2);
+
+      const img = $('#modalImg');
+      if (item.image) { img.src = item.image; img.style.display = 'block'; $('#modalEmoji').style.display = 'none'; }
+      else { img.style.display = 'none'; $('#modalEmoji').style.display = 'block'; }
+
+      const b = [];
+      if (item.isPopular) b.push('<span class="card-badge badge-pop">Popular</span>');
+      if (item.isNew) b.push('<span class="card-badge badge-new">New</span>');
+      if (item.isVegetarian) b.push('<span class="card-badge badge-veg">Vegetarian</span>');
+      $('#modalBadges').innerHTML = b.join('');
+
+      $('#modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      $('#modalOrderBtn').onclick = () => {
+        cartCount++;
+        $('#cartCount').textContent = cartCount;
+        closeModal();
+        showToast(`${item.name} added to cart!`);
+        if (item.isPopular || item.isNew) triggerConfetti();
+      };
+    }
+    function closeModal() {
+      $('#modalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    /* =============================================
+       QUICK ADD
+       ============================================= */
+    function quickAdd(id) {
+      const item = menuData.find(i => i.id === id);
+      if (!item) return;
+      cartCount++;
+      $('#cartCount').textContent = cartCount;
+      showToast(`${item.name} added!`);
+      if (item.isPopular) triggerConfetti();
+    }
+
+    /* =============================================
+       TOAST
+       ============================================= */
+    let toastTimer;
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      $('#toastMsg').textContent = msg;
+      $('#toast').classList.add('vis');
+      toastTimer = setTimeout(() => $('#toast').classList.remove('vis'), 2500);
+    }
+
+    /* =============================================
+       CONFETTI
+       ============================================= */
+    function triggerConfetti() {
+      const box = $('#confettiBox');
+      const colors = ['#e63946', '#f4a261', '#2a9d8f', '#eab308', '#a855f7', '#3b82f6'];
+      for (let i = 0; i < 50; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.width = (6 + Math.random() * 8) + 'px';
+        p.style.height = (6 + Math.random() * 8) + 'px';
+        p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        p.style.animation = `confettiFall ${2 + Math.random() * 3}s ease-out ${Math.random() * 0.5}s forwards`;
+        box.appendChild(p);
+      }
+      setTimeout(() => box.innerHTML = '', 5000);
+    }
+
+    /* =============================================
+       RANDOM PICK
+       ============================================= */
+    function randomPick() {
+      const pick = menuData[Math.floor(Math.random() * menuData.length)];
+      openModal(pick.id);
+      triggerConfetti();
+    }
+
+    /* =============================================
+       SCROLL HANDLING
+       ============================================= */
+    function handleScroll() {
+      const y = window.scrollY;
+      const max = document.body.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (y / max) * 100 : 0;
+      $('#scrollProgress').style.width = pct + '%';
+      $('#backTop').classList.toggle('vis', y > 500);
+      $('#stickyHeader').classList.toggle('scrolled', y > 100);
+    }
+
+    /* =============================================
+       NETWORK STATUS
+       ============================================= */
+    function updateNet() {
+      const on = navigator.onLine;
+      $('#offlineBanner').classList.toggle('visible', !on);
+      $('#netDot').classList.toggle('off', !on);
+      $('#netDot').title = on ? 'Online' : 'Offline';
+      document.body.classList.toggle('is-offline', !on);
+    }
+
+    /* =============================================
+       PWA: SERVICE WORKER
+       ============================================= */
+    let deferredPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const reg = await navigator.serviceWorker.register('./sw.js');
+          setInterval(() => reg.update(), 60 * 60 * 1000);
+          reg.addEventListener('updatefound', () => {
+            const w = reg.installing;
+            if (!w) return;
+            w.addEventListener('statechange', () => {
+              if (w.state === 'installed' && navigator.serviceWorker.controller) {
+                $('#updateToast').classList.add('vis');
+              }
+            });
+          });
+        } catch (e) { console.warn('SW fail:', e); }
+      });
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+    }
+    const installBtn = $('#installBtn');
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; installBtn.classList.add('visible'); });
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.classList.remove('visible');
+    });
+    window.addEventListener('appinstalled', () => { deferredPrompt = null; installBtn.classList.remove('visible'); });
+    $('#updateBtn').addEventListener('click', () => {
+      if (navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    });
+
+    /* =============================================
+       EVENT LISTENERS
+       ============================================= */
+    $('#searchInput').addEventListener('input', handleSearch);
+    $('#clearSearch').addEventListener('click', clearSearch);
+    $('#themeToggle').addEventListener('click', toggleTheme);
+    $('#backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    $('#randomBtn').addEventListener('click', randomPick);
+    $('#modalClose').addEventListener('click', closeModal);
+    $('#modalCloseBtn').addEventListener('click', closeModal);
+    $('#modalOverlay').addEventListener('click', e => { if (e.target === $('#modalOverlay')) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('online', updateNet);
+    window.addEventListener('offline', updateNet);
+
+    $('#catTabs').addEventListener('click', e => {
+      const tab = e.target.closest('.cat-tab');
+      if (tab) filterCat(tab.dataset.cat);
+    });
+    $$('.bn-item').forEach(b => {
+      b.addEventListener('click', () => {
+        $$('.bn-item').forEach(i => i.classList.remove('active'));
+        b.classList.add('active');
+        const s = b.dataset.s;
+        if (s) document.getElementById(s)?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.classList.contains('menu-card')) e.target.click();
+    });
+
+    /* =============================================
+       INIT
+       ============================================= */
+    initTheme();
+    createParticles();
+    buildTabs();
+    renderMenu();
+    lazyLoadImages();
+    updateNet();
+  </script>
+</body>
 </html>
